@@ -9,6 +9,7 @@
     --bg: url('https://giffiles.alphacoders.com/222/222699.gif');
     --text:#e9eef6;
     --muted:rgba(233,238,246,0.7);
+    --accent:#5865f2;
   }
   html,body{
     height:100%;margin:0;
@@ -45,14 +46,45 @@
   /* Audio controls pinned top-right */
   #audio-controls{
     position:fixed;top:10px;right:10px;
-    background:rgba(0,0,0,0.6);
-    padding:8px 12px;border-radius:12px;
-    display:flex;flex-direction:column;gap:6px;
-    font-size:12px;
+    background:rgba(15,15,20,0.85);
+    padding:12px 16px;border-radius:16px;
+    display:flex;flex-direction:column;gap:10px;
+    font-size:12px;width:220px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.4);
     z-index:999;
   }
-  #audio-controls input[type=range]{width:120px;}
-  #control-buttons{display:flex;gap:8px;justify-content:center;}
+  #control-buttons{display:flex;gap:10px;justify-content:center;}
+  #control-buttons button{
+    background:var(--accent);border:none;color:white;
+    padding:6px 12px;border-radius:8px;
+    cursor:pointer;font-size:14px;font-weight:600;
+    transition:background 0.2s;
+  }
+  #control-buttons button:hover{background:#4752c4;}
+  #audio-controls label{font-size:11px;color:var(--muted);}
+  #audio-controls input[type=range]{
+    width:100%;
+    -webkit-appearance:none;
+    background:rgba(255,255,255,0.15);
+    height:5px;border-radius:5px;outline:none;
+  }
+  #audio-controls input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;
+    background:var(--accent);cursor:pointer;
+  }
+
+  /* Discord status box */
+  #discord-box{
+    margin-top:14px;
+    background:rgba(0,0,0,0.5);
+    border-radius:12px;
+    padding:10px;
+    display:flex;align-items:center;gap:10px;
+  }
+  #discord-box img{width:36px;height:36px;border-radius:50%;}
+  #discord-info{display:flex;flex-direction:column;font-size:12px;}
+  #discord-status{font-size:11px;color:var(--muted);}
 </style>
 </head>
 <body>
@@ -63,15 +95,27 @@
       <h1 class="name" id="display-name"></h1>
       <p class="role" id="role"></p>
       <div class="platforms">
-        <a class="link" href="https://discord.gg/akadmin" target="_blank">💬 Discord</a>
-        <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">🎮 Roblox</a>
-        <a class="link" href="mailto:suzakfv@gmail.com">✉️ Email</a>
+        <!-- Discord -->
+        <a class="link" href="https://discord.gg/akadmin" target="_blank">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.369a19.79..."/></svg>
+          Discord
+        </a>
+        <!-- Roblox -->
+        <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2l20 4-4 20-20-4 4-20zM9.3 9.3l5.4 1.1-1.1 5.4-5.4-1.1 1.1-5.4z"/></svg>
+          Roblox
+        </a>
+        <!-- Email -->
+        <a class="link" href="mailto:suzakfv@gmail.com">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2v12h16V6l-8 5-8-5z"/></svg>
+          Email
+        </a>
       </div>
     </section>
   </main>
 </div>
 
-<!-- Audio UI -->
+<!-- Audio Player -->
 <div id="audio-controls">
   <div id="control-buttons">
     <button id="playpause">⏯</button>
@@ -82,6 +126,15 @@
   <input type="range" id="volume" value="100" min="0" max="100">
   <label>Speed</label>
   <input type="range" id="speed" value="100" min="50" max="200">
+  
+  <!-- Discord status -->
+  <div id="discord-box">
+    <img id="discord-avatar" src="" alt="discord avatar">
+    <div id="discord-info">
+      <span id="discord-username">Loading...</span>
+      <span id="discord-status">...</span>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -104,8 +157,8 @@ typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
 });
 typeWriter(document.querySelector("#page-title"),displayName,150);
 
-/* === Audio Controls (JS only) === */
-const audio=new Audio("https://raw.githubusercontent.com/suzakfv/akkk/main/AUDIO.mp3");
+/* === Audio Controls === */
+const audio=new Audio("https://raw.githubusercontent.com/USERNAME/REPO/main/AUDIO.mp3");
 audio.loop=true;
 const playpause=document.getElementById("playpause");
 const progress=document.getElementById("progress");
@@ -129,7 +182,19 @@ volume.addEventListener("input",()=>{
 speed.addEventListener("input",()=>{
   audio.playbackRate=speed.value/100;
 });
+
+/* === Discord Status (via Lanyard API) === */
+async function loadDiscord(){
+  const res=await fetch("https://api.lanyard.rest/v1/users/937401074577465375");
+  const data=await res.json();
+  if(data.success){
+    const d=data.data;
+    document.getElementById("discord-avatar").src=`https://cdn.discordapp.com/avatars/${d.discord_user.id}/${d.discord_user.avatar}.png`;
+    document.getElementById("discord-username").textContent=d.discord_user.username+"#"+d.discord_user.discriminator;
+    document.getElementById("discord-status").textContent=d.discord_status;
+  }
+}
+loadDiscord();
 </script>
 </body>
 </html>
-
