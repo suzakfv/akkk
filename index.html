@@ -18,21 +18,7 @@
     color:var(--text);
     display:flex;align-items:center;justify-content:center;
   }
-
-  /* Drag screen */
-  #drop-screen{
-    position:fixed;inset:0;
-    display:flex;align-items:center;justify-content:center;
-    flex-direction:column;text-align:center;
-    background:rgba(0,0,0,0.8);
-    z-index:1000;color:var(--text);
-    font-size:18px;cursor:pointer;
-  }
-  #drop-screen.dragover{background:rgba(88,101,242,0.4);}
-  #drop-screen p{margin:12px 0;}
-
-  /* Profile card */
-  .wrap{display:none;min-height:100%;place-items:center;padding:20px;}
+  .wrap{min-height:100%;place-items:center;padding:20px;display:grid;}
   .card{
     max-width:900px;width:100%;
     padding:28px;border-radius:18px;
@@ -47,7 +33,6 @@
   .name{font-size:22px;font-weight:700;margin:0;min-height:28px;}
   .role{font-size:14px;color:var(--muted);min-height:20px;}
   .bio{font-size:15px;color:var(--muted);margin-bottom:10px;min-height:40px;}
-
   .platforms{display:flex;flex-direction:column;gap:10px;width:100%;}
   .link{
     display:flex;align-items:center;gap:8px;
@@ -61,22 +46,16 @@
 
   /* Audio UI */
   #audio-controls{
-    margin-top:12px;
-    display:flex;align-items:center;gap:10px;
+    margin-top:14px;
+    display:flex;flex-direction:column;gap:8px;
+    width:100%;max-width:250px;
   }
-  #progress{flex:1;}
+  #audio-controls label{font-size:12px;color:var(--muted);}
+  #audio-controls input[type=range]{width:100%;}
+  #control-buttons{display:flex;gap:8px;justify-content:center;}
 </style>
 </head>
 <body>
-
-<!-- Drag & Drop Setup -->
-<div id="drop-screen">
-  <h2>🎵 Drop an audio file</h2>
-  <p>Drag your MP3/WAV here to set background music.</p>
-  <small>(It will be saved in your browser)</small>
-</div>
-
-<!-- Profile -->
 <div class="wrap" id="profile">
   <main class="card">
     <section class="left">
@@ -86,12 +65,12 @@
       <div class="platforms">
         <!-- Discord -->
         <a class="link" href="https://discord.gg/akadmin" target="_blank">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515..."/></svg>
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.369a19.79..."/></svg>
           Discord
         </a>
         <!-- Roblox -->
         <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2l20 4-4 20-20-4 4-20zM9.3 9.3l5.4 1.1-1.1 5.4-5.4-1.1 1.1-5.4z"/></svg>
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2l20 4-4 20-20-4 4-20zM9.3 9.3..."/></svg>
           Roblox
         </a>
         <!-- Email -->
@@ -100,9 +79,16 @@
         </a>
       </div>
       <!-- Audio UI -->
-      <div id="audio-controls" style="display:none;">
-        <button id="playpause">⏯</button>
+      <div id="audio-controls">
+        <div id="control-buttons">
+          <button id="playpause">⏯</button>
+        </div>
+        <label>Progress</label>
         <input type="range" id="progress" value="0" min="0" max="100">
+        <label>Volume</label>
+        <input type="range" id="volume" value="100" min="0" max="100">
+        <label>Playback Speed</label>
+        <input type="range" id="speed" value="100" min="50" max="200">
       </div>
     </section>
     <section class="right">
@@ -111,7 +97,8 @@
   </main>
 </div>
 
-<audio id="bg-audio" loop></audio>
+<!-- Audio -->
+<audio id="bg-audio" src="https://raw.githubusercontent.com/USERNAME/REPO/main/AUDIO.mp3" loop></audio>
 
 <script>
 /* === Typewriter === */
@@ -135,46 +122,16 @@ typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
 typeWriter(document.querySelector("#page-title"),displayName,150);
 typeWriter(document.querySelector("#bio"),bioText,40);
 
-/* === Audio Handling === */
-const dropScreen=document.getElementById("drop-screen");
-const profile=document.getElementById("profile");
+/* === Audio Controls === */
 const audio=document.getElementById("bg-audio");
 const playpause=document.getElementById("playpause");
 const progress=document.getElementById("progress");
-const controls=document.getElementById("audio-controls");
+const volume=document.getElementById("volume");
+const speed=document.getElementById("speed");
 
-// Check if saved audio exists
-const saved=localStorage.getItem("customAudio");
-if(saved){
-  audio.src=saved;
-  dropScreen.style.display="none";
-  profile.style.display="grid";
-  controls.style.display="flex";
-}
+// Ensure audio only plays after click (browser autoplay policy)
+document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:true});
 
-/* Drag & Drop */
-dropScreen.addEventListener("dragover",e=>{
-  e.preventDefault();dropScreen.classList.add("dragover");
-});
-dropScreen.addEventListener("dragleave",()=>dropScreen.classList.remove("dragover"));
-dropScreen.addEventListener("drop",e=>{
-  e.preventDefault();dropScreen.classList.remove("dragover");
-  const file=e.dataTransfer.files[0];
-  if(file && file.type.startsWith("audio/")){
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      const data=ev.target.result;
-      audio.src=data;
-      localStorage.setItem("customAudio",data);
-      dropScreen.style.display="none";
-      profile.style.display="grid";
-      controls.style.display="flex";
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-/* Audio UI */
 playpause.addEventListener("click",()=>{
   if(audio.paused){audio.play();} else {audio.pause();}
 });
@@ -184,7 +141,12 @@ audio.addEventListener("timeupdate",()=>{
 progress.addEventListener("input",()=>{
   audio.currentTime=(progress.value/100)*audio.duration;
 });
+volume.addEventListener("input",()=>{
+  audio.volume=volume.value/100;
+});
+speed.addEventListener("input",()=>{
+  audio.playbackRate=speed.value/100*1.0; // 100 = normal, 200 = double speed
+});
 </script>
 </body>
 </html>
-
