@@ -1,0 +1,225 @@
+<!-- save as profile.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Your Name — Profile</title>
+<style>
+  :root{
+    /* Replace with your background image URL or gradient */
+    --bg: url('REPLACE_BACKGROUND_URL');
+    --accent: rgba(255,255,255,0.06);
+    --glass: rgba(255,255,255,0.06);
+    --glass-2: rgba(255,255,255,0.04);
+    --text: #e9eef6;
+    --muted: rgba(233,238,246,0.7);
+    --card-radius: 18px;
+    --card-pad: 28px;
+    --max-w: 980px;
+    --accent-color: #5865f2; /* default discord-like accent (change if you want) */
+  }
+
+  html,body{
+    height:100%;
+    margin:0;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.6)), center/cover no-repeat var(--bg);
+    color:var(--text);
+  }
+
+  .wrap {
+    min-height:100%;
+    display:grid;
+    place-items:center;
+    padding:48px 20px;
+  }
+
+  .card {
+    width:100%;
+    max-width:var(--max-w);
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
+    border-radius:var(--card-radius);
+    padding:var(--card-pad);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    display:flex;
+    gap:24px;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* left column - avatar + quick links */
+  .left {
+    width:260px;
+    min-width:220px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    align-items:center;
+    text-align:center;
+  }
+
+  .avatar {
+    width:128px;
+    height:128px;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(255,255,255,0.03);
+    background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08));
+    display:grid;
+    place-items:center;
+    font-weight:700;
+    font-size:28px;
+    color:var(--muted);
+  }
+
+  .name {
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:0.3px;
+    margin:0;
+  }
+  .role {
+    font-size:13px;
+    color:var(--muted);
+    margin:0;
+  }
+
+  .platforms {
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    align-items:stretch;
+  }
+
+  .link {
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+    padding:10px 12px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.03));
+    text-decoration:none;
+    color:var(--text);
+    font-weight:600;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .link:active{ transform:translateY(1px); }
+  .link svg{ width:18px; height:18px; opacity:0.95; }
+
+  /* right column - bio + discord widget */
+  .right {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .bio {
+    font-size:15px;
+    color:var(--muted);
+    line-height:1.45;
+    margin-bottom:6px;
+  }
+
+  .controls {
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-top:8px;
+  }
+
+  .btn {
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+    padding:10px 14px;
+    border-radius:12px;
+    background:linear-gradient(180deg,var(--accent), rgba(80,90,240,0.9));
+    color:white;
+    text-decoration:none;
+    font-weight:700;
+    box-shadow: 0 6px 18px rgba(88,101,242,0.14);
+  }
+
+  .discord-widget-wrap {
+    margin-top:14px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  /* small widget and larger invite card */
+  .widget {
+    width:260px;
+    min-width:220px;
+    height:130px;
+    border-radius:12px;
+    overflow:hidden;
+    background:var(--glass-2);
+    display:grid;
+    place-items:center;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+  }
+
+  .widget iframe{
+    width:100%;
+    height:100%;
+    border:0;
+  }
+
+  .invite {
+    flex:1;
+    min-width:200px;
+    border-radius:12px;
+    padding:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    justify-content:center;
+  }
+
+  .muted {
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  /* responsive */
+  @media (max-width:880px){
+    .card{ flex-direction:column; padding:20px; }
+    .left{ width:100%; flex-direction:row; justify-content:flex-start; gap:14px; align-items:center; }
+    .avatar{ width:96px; height:96px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card" role="main">
+      <section class="left" aria-label="profile">
+        <div class="avatar">
+          <!-- Replace with image element if you want -->
+          <img src="REPLACE_AVATAR_URL" alt="Avatar" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:16px;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <h1 class="name">Your Display Name</h1>
+          <p class="role">Short tagline or role — e.g. Creator · Dev · Gamer</p>
+
+          <div class="platforms" style="margin-top:6px;">
+            <!-- Replace each href with your platform link -->
+            <a class="link" href="https://twitter.com/REPLACE" target="_blank" rel="noopener">
+              <!-- simple bird svg -->
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 5.9c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.3 1.7-2.2-.7.4-1.6.7-2.5.9A4.1 4.1 0 0012 8.2c0 .3 0 .7.1 1C8.2 9.1 5 7.1 3.1 4.1c-.3.5-.5 1.2-.5 1.8 0 1.5.8 2.8 2 3.5-.6 0-1.2-.2-1.7-.5v.1c0 1.8 1.3 3.4 3 3.7-.3.1-.7.1-1 .1-.2 0-.4 0-.6-.1.4 1.3 1.6 2.3 3 2.3A8.3 8.3 0 012 19.5 11.7 11.7 0 008.1 21c7.6 0 11.8-6.5 11.8-12.2v-.6c.8-.6 1.5-1.4 2-2.3-.7.3-1.4.5-2.1.6z"/></svg>
+              Twitter
+            </a>
+
+            <a class="link" href="https://youtube.com/REPLACE" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 7.1s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.2-1-3-.2-
