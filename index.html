@@ -9,7 +9,6 @@
     --bg: url('https://giffiles.alphacoders.com/222/222699.gif');
     --text:#e9eef6;
     --muted:rgba(233,238,246,0.7);
-    --accent-color:#5865f2;
   }
   html,body{
     height:100%;margin:0;
@@ -18,7 +17,7 @@
     color:var(--text);
     display:flex;align-items:center;justify-content:center;
   }
-  .wrap{min-height:100%;place-items:center;padding:20px;display:grid;}
+  .wrap{padding:20px;display:grid;place-items:center;width:100%;}
   .card{
     max-width:900px;width:100%;
     padding:28px;border-radius:18px;
@@ -32,7 +31,6 @@
   .avatar img{width:100%;height:100%;object-fit:cover;}
   .name{font-size:22px;font-weight:700;margin:0;min-height:28px;}
   .role{font-size:14px;color:var(--muted);min-height:20px;}
-  .bio{font-size:15px;color:var(--muted);margin-bottom:10px;min-height:40px;}
   .platforms{display:flex;flex-direction:column;gap:10px;width:100%;}
   .link{
     display:flex;align-items:center;gap:8px;
@@ -44,14 +42,16 @@
   .link:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);}
   .link svg{width:18px;height:18px;}
 
-  /* Audio UI */
+  /* Audio controls pinned top-right */
   #audio-controls{
-    margin-top:14px;
-    display:flex;flex-direction:column;gap:8px;
-    width:100%;max-width:250px;
+    position:fixed;top:10px;right:10px;
+    background:rgba(0,0,0,0.6);
+    padding:8px 12px;border-radius:12px;
+    display:flex;flex-direction:column;gap:6px;
+    font-size:12px;
+    z-index:999;
   }
-  #audio-controls label{font-size:12px;color:var(--muted);}
-  #audio-controls input[type=range]{width:100%;}
+  #audio-controls input[type=range]{width:120px;}
   #control-buttons{display:flex;gap:8px;justify-content:center;}
 </style>
 </head>
@@ -63,42 +63,26 @@
       <h1 class="name" id="display-name"></h1>
       <p class="role" id="role"></p>
       <div class="platforms">
-        <!-- Discord -->
-        <a class="link" href="https://discord.gg/akadmin" target="_blank">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.369a19.79..."/></svg>
-          Discord
-        </a>
-        <!-- Roblox -->
-        <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2l20 4-4 20-20-4 4-20zM9.3 9.3..."/></svg>
-          Roblox
-        </a>
-        <!-- Email -->
-        <a class="link" href="mailto:suzakfv@gmail.com">
-          ✉️ Email
-        </a>
+        <a class="link" href="https://discord.gg/akadmin" target="_blank">💬 Discord</a>
+        <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">🎮 Roblox</a>
+        <a class="link" href="mailto:suzakfv@gmail.com">✉️ Email</a>
       </div>
-      <!-- Audio UI -->
-      <div id="audio-controls">
-        <div id="control-buttons">
-          <button id="playpause">⏯</button>
-        </div>
-        <label>Progress</label>
-        <input type="range" id="progress" value="0" min="0" max="100">
-        <label>Volume</label>
-        <input type="range" id="volume" value="100" min="0" max="100">
-        <label>Playback Speed</label>
-        <input type="range" id="speed" value="100" min="50" max="200">
-      </div>
-    </section>
-    <section class="right">
-      <p class="bio" id="bio"></p>
     </section>
   </main>
 </div>
 
-<!-- Audio -->
-<audio id="bg-audio" src="https://raw.githubusercontent.com/USERNAME/REPO/main/AUDIO.mp3" loop></audio>
+<!-- Audio UI -->
+<div id="audio-controls">
+  <div id="control-buttons">
+    <button id="playpause">⏯</button>
+  </div>
+  <label>Progress</label>
+  <input type="range" id="progress" value="0" min="0" max="100">
+  <label>Volume</label>
+  <input type="range" id="volume" value="100" min="0" max="100">
+  <label>Speed</label>
+  <input type="range" id="speed" value="100" min="50" max="200">
+</div>
 
 <script>
 /* === Typewriter === */
@@ -114,22 +98,20 @@ function typeWriter(el,text,delay=75,callback){
 }
 const displayName="suzak";
 const roleText="Developer / Creator";
-const bioText="Building cool Roblox scripts since 2022.";
 document.title="";
 typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
   typeWriter(document.querySelector("#role"),roleText,60);
 });
 typeWriter(document.querySelector("#page-title"),displayName,150);
-typeWriter(document.querySelector("#bio"),bioText,40);
 
-/* === Audio Controls === */
-const audio=document.getElementById("bg-audio");
+/* === Audio Controls (JS only) === */
+const audio=new Audio("https://raw.githubusercontent.com/suzakfv/akkk/main/AUDIO.mp3");
+audio.loop=true;
 const playpause=document.getElementById("playpause");
 const progress=document.getElementById("progress");
 const volume=document.getElementById("volume");
 const speed=document.getElementById("speed");
 
-// Ensure audio only plays after click (browser autoplay policy)
 document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:true});
 
 playpause.addEventListener("click",()=>{
@@ -145,8 +127,9 @@ volume.addEventListener("input",()=>{
   audio.volume=volume.value/100;
 });
 speed.addEventListener("input",()=>{
-  audio.playbackRate=speed.value/100*1.0; // 100 = normal, 200 = double speed
+  audio.playbackRate=speed.value/100;
 });
 </script>
 </body>
 </html>
+
