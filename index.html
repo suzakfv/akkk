@@ -1,225 +1,119 @@
-<!-- save as profile.html -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Your Name — Profile</title>
+<title id="page-title">Loading...</title>
 <style>
   :root{
-    /* Replace with your background image URL or gradient */
     --bg: url('REPLACE_BACKGROUND_URL');
-    --accent: rgba(255,255,255,0.06);
-    --glass: rgba(255,255,255,0.06);
-    --glass-2: rgba(255,255,255,0.04);
-    --text: #e9eef6;
-    --muted: rgba(233,238,246,0.7);
-    --card-radius: 18px;
-    --card-pad: 28px;
-    --max-w: 980px;
-    --accent-color: #5865f2; /* default discord-like accent (change if you want) */
+    --text:#e9eef6;
+    --muted:rgba(233,238,246,0.7);
+    --accent-color:#5865f2;
   }
 
   html,body{
     height:100%;
     margin:0;
-    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.6)), center/cover no-repeat var(--bg);
+    font-family:Inter,system-ui,sans-serif;
+    background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.6)),center/cover no-repeat var(--bg);
     color:var(--text);
   }
 
-  .wrap {
-    min-height:100%;
-    display:grid;
-    place-items:center;
-    padding:48px 20px;
+  .wrap{min-height:100%;display:grid;place-items:center;padding:48px 20px;}
+  .card{
+    max-width:900px;width:100%;
+    padding:28px;border-radius:18px;
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(12px) saturate(120%);
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    display:flex;gap:24px;align-items:center;
   }
+  .left{min-width:220px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;}
+  .avatar{width:128px;height:128px;border-radius:20px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.5);}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+  .name{font-size:22px;font-weight:700;margin:0;}
+  .role{font-size:14px;color:var(--muted);min-height:20px;}
+  .platforms{display:flex;flex-direction:column;gap:10px;width:100%;}
 
-  .card {
-    width:100%;
-    max-width:var(--max-w);
-    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
-    border-radius:var(--card-radius);
-    padding:var(--card-pad);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
-    display:flex;
-    gap:24px;
-    align-items:center;
-    position:relative;
-    overflow:hidden;
+  .link{
+    display:flex;align-items:center;gap:8px;
+    padding:10px 12px;border-radius:12px;
+    background:rgba(255,255,255,0.05);
+    text-decoration:none;color:var(--text);font-weight:600;
+    transition:transform .2s,box-shadow .2s;
   }
+  .link:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,255,255,0.2);}
+  .link svg{width:18px;height:18px;}
 
-  /* left column - avatar + quick links */
-  .left {
-    width:260px;
-    min-width:220px;
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-    align-items:center;
-    text-align:center;
-  }
+  .bio{font-size:15px;color:var(--muted);margin-bottom:10px;}
 
-  .avatar {
-    width:128px;
-    height:128px;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(255,255,255,0.03);
-    background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08));
-    display:grid;
-    place-items:center;
-    font-weight:700;
-    font-size:28px;
-    color:var(--muted);
-  }
-
-  .name {
-    font-size:20px;
-    font-weight:700;
-    letter-spacing:0.3px;
-    margin:0;
-  }
-  .role {
-    font-size:13px;
-    color:var(--muted);
-    margin:0;
-  }
-
-  .platforms {
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    align-items:stretch;
-  }
-
-  .link {
-    display:inline-flex;
-    gap:10px;
-    align-items:center;
-    padding:10px 12px;
-    border-radius:12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.03));
-    text-decoration:none;
-    color:var(--text);
-    font-weight:600;
-    transition:transform .12s ease, box-shadow .12s ease;
-  }
-  .link:active{ transform:translateY(1px); }
-  .link svg{ width:18px; height:18px; opacity:0.95; }
-
-  /* right column - bio + discord widget */
-  .right {
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-
-  .bio {
-    font-size:15px;
-    color:var(--muted);
-    line-height:1.45;
-    margin-bottom:6px;
-  }
-
-  .controls {
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    align-items:center;
-    margin-top:8px;
-  }
-
-  .btn {
-    display:inline-flex;
-    gap:10px;
-    align-items:center;
-    padding:10px 14px;
-    border-radius:12px;
-    background:linear-gradient(180deg,var(--accent), rgba(80,90,240,0.9));
-    color:white;
-    text-decoration:none;
-    font-weight:700;
-    box-shadow: 0 6px 18px rgba(88,101,242,0.14);
-  }
-
-  .discord-widget-wrap {
-    margin-top:14px;
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-    flex-wrap:wrap;
-  }
-
-  /* small widget and larger invite card */
-  .widget {
-    width:260px;
-    min-width:220px;
-    height:130px;
-    border-radius:12px;
-    overflow:hidden;
-    background:var(--glass-2);
-    display:grid;
-    place-items:center;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
-  }
-
-  .widget iframe{
-    width:100%;
-    height:100%;
-    border:0;
-  }
-
-  .invite {
-    flex:1;
-    min-width:200px;
-    border-radius:12px;
-    padding:12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    justify-content:center;
-  }
-
-  .muted {
-    color:var(--muted);
-    font-size:13px;
-  }
-
-  /* responsive */
-  @media (max-width:880px){
-    .card{ flex-direction:column; padding:20px; }
-    .left{ width:100%; flex-direction:row; justify-content:flex-start; gap:14px; align-items:center; }
-    .avatar{ width:96px; height:96px; }
+  @media(max-width:800px){
+    .card{flex-direction:column;}
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <main class="card" role="main">
-      <section class="left" aria-label="profile">
-        <div class="avatar">
-          <!-- Replace with image element if you want -->
-          <img src="REPLACE_AVATAR_URL" alt="Avatar" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:16px;">
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <h1 class="name">Your Display Name</h1>
-          <p class="role">Short tagline or role — e.g. Creator · Dev · Gamer</p>
+<div class="wrap">
+  <main class="card">
+    <section class="left">
+      <div class="avatar"><img src="REPLACE_AVATAR_URL" alt="Avatar"></div>
+      <h1 class="name" id="display-name"></h1>
+      <p class="role" id="role"></p>
+      <div class="platforms">
+        <!-- Discord -->
+        <a class="link" href="REPLACE_DISCORD_INVITE" target="_blank">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515..."/></svg>
+          Discord
+        </a>
+        <!-- Roblox -->
+        <a class="link" href="https://www.roblox.com/users/REPLACE/profile" target="_blank">
+          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2l20 4-4 20-20-4 4-20zM9.3 9.3l5.4 1.1-1.1 5.4-5.4-1.1 1.1-5.4z"/></svg>
+          Roblox
+        </a>
+        <!-- Email -->
+        <a class="link" href="suzakfv@gamil.com">
+          ✉️ Email
+        </a>
+      </div>
+    </section>
+    <section class="right">
+      <p class="bio">fuck me pls.</p>
+      <!-- Discord widget -->
+      <iframe src="https://discord.com/widget?id=REPLACE_DISCORD_SERVER_ID&theme=dark"
+              width="320" height="200" allowtransparency="true" frameborder="0"
+              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+    </section>
+  </main>
+</div>
 
-          <div class="platforms" style="margin-top:6px;">
-            <!-- Replace each href with your platform link -->
-            <a class="link" href="https://twitter.com/REPLACE" target="_blank" rel="noopener">
-              <!-- simple bird svg -->
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 5.9c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.3 1.7-2.2-.7.4-1.6.7-2.5.9A4.1 4.1 0 0012 8.2c0 .3 0 .7.1 1C8.2 9.1 5 7.1 3.1 4.1c-.3.5-.5 1.2-.5 1.8 0 1.5.8 2.8 2 3.5-.6 0-1.2-.2-1.7-.5v.1c0 1.8 1.3 3.4 3 3.7-.3.1-.7.1-1 .1-.2 0-.4 0-.6-.1.4 1.3 1.6 2.3 3 2.3A8.3 8.3 0 012 19.5 11.7 11.7 0 008.1 21c7.6 0 11.8-6.5 11.8-12.2v-.6c.8-.6 1.5-1.4 2-2.3-.7.3-1.4.5-2.1.6z"/></svg>
-              Twitter
-            </a>
+<!-- Audio -->
+<audio id="bg-audio" src="https://raw.githubusercontent.com/REPLACE_USER/REPLACE_REPO/main/REPLACE_AUDIO.mp3" autoplay loop></audio>
 
-            <a class="link" href="https://youtube.com/REPLACE" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 7.1s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.2-1-3-.2-
+<script>
+/* ===== Typewriter Effect ===== */
+function typeWriter(el,text,delay=75,callback){
+  let i=0;
+  function type(){
+    if(i<text.length){
+      el.textContent += text.charAt(i);
+      i++; setTimeout(type,delay);
+    } else if(callback){callback();}
+  }
+  type();
+}
+const displayName="Your Display Name"; // <-- change if needed
+const roleText="Creator · Developer · Gamer"; // tagline
+document.title="";
+typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
+  typeWriter(document.querySelector("#role"),roleText,60);
+});
+typeWriter(document.querySelector("#page-title"),displayName,150);
+
+/* ===== Optional: play audio only after user interaction (autoplay policies) ===== */
+const audio=document.getElementById("bg-audio");
+document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:true});
+</script>
+</body>
+</html>
+
