@@ -17,7 +17,7 @@
     color:var(--text);
     display:flex;align-items:center;justify-content:center;
   }
-  .wrap{padding:20px;display:grid;place-items:center;width:100%;}
+  .wrap{padding:20px;display:grid;place-items:center;width:100%;gap:20px;}
   .card{
     max-width:900px;width:100%;
     padding:28px;border-radius:18px;
@@ -42,17 +42,66 @@
   .link:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);}
   .link svg{width:18px;height:18px;}
 
+  /* Discord widget styling */
+  .discord-widget{
+    max-width:900px;width:100%;
+    padding:20px;border-radius:18px;
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(12px) saturate(120%);
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  }
+  .discord-widget h3{
+    margin:0 0 15px 0;
+    font-size:18px;
+    color:var(--text);
+    text-align:center;
+  }
+  .discord-widget iframe{
+    width:100%;
+    border:none;
+    border-radius:12px;
+    background:rgba(54,57,63,0.9);
+  }
+
   /* Audio controls pinned top-right */
   #audio-controls{
-    position:fixed;top:10px;right:10px;
-    background:rgba(0,0,0,0.6);
-    padding:8px 12px;border-radius:12px;
-    display:flex;flex-direction:column;gap:6px;
+    position:fixed;top:15px;right:15px;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(8px);
+    padding:12px 16px;border-radius:12px;
+    display:flex;flex-direction:column;gap:8px;
     font-size:12px;
     z-index:999;
+    min-width:140px;
   }
-  #audio-controls input[type=range]{width:120px;}
-  #control-buttons{display:flex;gap:8px;justify-content:center;}
+  #audio-controls input[type=range]{width:100%;}
+  #control-buttons{display:flex;gap:8px;justify-content:center;align-items:center;}
+  #control-buttons button{
+    background:rgba(255,255,255,0.1);
+    border:none;
+    border-radius:8px;
+    color:var(--text);
+    padding:8px 12px;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  #control-buttons button:hover{background:rgba(255,255,255,0.2);}
+  .control-label{font-weight:600;margin-bottom:2px;}
+  #now-playing{
+    font-size:10px;
+    color:var(--muted);
+    text-align:center;
+    max-width:140px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  @media (max-width: 768px) {
+    .card{flex-direction:column;text-align:center;}
+    .discord-widget{margin-top:20px;}
+    #audio-controls{top:10px;right:10px;min-width:120px;}
+  }
 </style>
 </head>
 <body>
@@ -63,24 +112,32 @@
       <h1 class="name" id="display-name"></h1>
       <p class="role" id="role"></p>
       <div class="platforms">
-        <a class="link" href="https://discord.gg/akadmin" target="_blank">💬 Discord</a>
+        <a class="link" href="https://discord.gg/akadmin" target="_blank">💬 Discord Server</a>
         <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">🎮 Roblox</a>
         <a class="link" href="mailto:suzakfv@gmail.com">✉️ Email</a>
       </div>
     </section>
   </main>
+  
+  <!-- Discord Widget -->
+  <div class="discord-widget">
+    <h3>🎮 Discord Status</h3>
+    <iframe src="https://lanyard-profile-readme.vercel.app/api/937401074577465375?theme=dark&bg=36393f&animated=true&hideDiscrim=false&borderRadius=12px&idleMessage=Probably%20coding..." width="100%" height="120"></iframe>
+  </div>
 </div>
 
 <!-- Audio UI -->
 <div id="audio-controls">
+  <div id="now-playing">Click anywhere to start music</div>
   <div id="control-buttons">
-    <button id="playpause">⏯</button>
+    <button id="playpause">▶️</button>
+    <button id="mute">🔊</button>
   </div>
-  <label>Progress</label>
+  <div class="control-label">Progress</div>
   <input type="range" id="progress" value="0" min="0" max="100">
-  <label>Volume</label>
-  <input type="range" id="volume" value="100" min="0" max="100">
-  <label>Speed</label>
+  <div class="control-label">Volume</div>
+  <input type="range" id="volume" value="70" min="0" max="100">
+  <div class="control-label">Speed</div>
   <input type="range" id="speed" value="100" min="50" max="200">
 </div>
 
@@ -104,32 +161,121 @@ typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
 });
 typeWriter(document.querySelector("#page-title"),displayName,150);
 
-/* === Audio Controls (JS only) === */
-const audio=new Audio("https://raw.githubusercontent.com/USERNAME/REPO/main/AUDIO.mp3");
-audio.loop=true;
-const playpause=document.getElementById("playpause");
-const progress=document.getElementById("progress");
-const volume=document.getElementById("volume");
-const speed=document.getElementById("speed");
+/* === Audio Controls === */
+// Using a working audio source - you can replace this URL with your own
+const audio = new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-05.wav");
+audio.loop = true;
+audio.volume = 0.7; // Start at 70% volume
 
-document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:true});
+const playpause = document.getElementById("playpause");
+const muteBtn = document.getElementById("mute");
+const progress = document.getElementById("progress");
+const volume = document.getElementById("volume");
+const speed = document.getElementById("speed");
+const nowPlaying = document.getElementById("now-playing");
 
-playpause.addEventListener("click",()=>{
-  if(audio.paused){audio.play();} else {audio.pause();}
+let isPlaying = false;
+let isMuted = false;
+let hasStarted = false;
+
+// Auto-play on first click anywhere
+document.body.addEventListener("click", () => {
+  if (!hasStarted) {
+    audio.play().then(() => {
+      isPlaying = true;
+      hasStarted = true;
+      playpause.textContent = "⏸️";
+      nowPlaying.textContent = "♪ Background Music Playing";
+    }).catch((e) => {
+      nowPlaying.textContent = "Audio blocked by browser";
+      console.log("Audio autoplay prevented:", e);
+    });
+  }
+}, {once: true});
+
+// Play/Pause button
+playpause.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (isPlaying) {
+    audio.pause();
+    playpause.textContent = "▶️";
+    nowPlaying.textContent = "Music paused";
+    isPlaying = false;
+  } else {
+    audio.play().then(() => {
+      playpause.textContent = "⏸️";
+      nowPlaying.textContent = "♪ Background Music Playing";
+      isPlaying = true;
+    }).catch((e) => {
+      nowPlaying.textContent = "Unable to play audio";
+    });
+  }
 });
-audio.addEventListener("timeupdate",()=>{
-  progress.value=(audio.currentTime/audio.duration)*100||0;
+
+// Mute button
+muteBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (isMuted) {
+    audio.muted = false;
+    muteBtn.textContent = "🔊";
+    isMuted = false;
+  } else {
+    audio.muted = true;
+    muteBtn.textContent = "🔇";
+    isMuted = true;
+  }
 });
-progress.addEventListener("input",()=>{
-  audio.currentTime=(progress.value/100)*audio.duration;
+
+// Progress bar
+audio.addEventListener("timeupdate", () => {
+  if (audio.duration) {
+    progress.value = (audio.currentTime / audio.duration) * 100;
+  }
 });
-volume.addEventListener("input",()=>{
-  audio.volume=volume.value/100;
+
+progress.addEventListener("input", () => {
+  if (audio.duration) {
+    audio.currentTime = (progress.value / 100) * audio.duration;
+  }
 });
-speed.addEventListener("input",()=>{
-  audio.playbackRate=speed.value/100;
+
+// Volume control
+volume.addEventListener("input", () => {
+  audio.volume = volume.value / 100;
+  if (volume.value == 0) {
+    muteBtn.textContent = "🔇";
+  } else {
+    muteBtn.textContent = "🔊";
+  }
+});
+
+// Speed control
+speed.addEventListener("input", () => {
+  audio.playbackRate = speed.value / 100;
+});
+
+// Handle audio events
+audio.addEventListener("loadstart", () => {
+  nowPlaying.textContent = "Loading audio...";
+});
+
+audio.addEventListener("canplay", () => {
+  if (!hasStarted) {
+    nowPlaying.textContent = "Click anywhere to start music";
+  }
+});
+
+audio.addEventListener("error", () => {
+  nowPlaying.textContent = "Audio failed to load";
+});
+
+audio.addEventListener("ended", () => {
+  if (!audio.loop) {
+    isPlaying = false;
+    playpause.textContent = "▶️";
+    nowPlaying.textContent = "Music ended";
+  }
 });
 </script>
 </body>
 </html>
-
