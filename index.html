@@ -20,22 +20,21 @@
   }
   .wrap{padding:20px;display:grid;place-items:center;width:100%;}
   .card{
-    max-width:900px;width:100%;
-    padding:28px;border-radius:18px;
-    background:rgba(255,255,255,0.06);
-    backdrop-filter:blur(12px) saturate(120%);
+    max-width:400px;width:100%;
+    padding:32px;border-radius:20px;
+    background:rgba(20,20,20,0.6);
+    backdrop-filter:blur(16px) saturate(120%);
     box-shadow:0 10px 30px rgba(0,0,0,0.5);
-    display:flex;gap:24px;align-items:center;justify-content:center;
+    text-align:center;
   }
-  .left{min-width:220px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;}
-  .avatar{width:128px;height:128px;border-radius:20px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.5);}
+  .avatar{width:120px;height:120px;border-radius:18px;overflow:hidden;margin:0 auto 16px;box-shadow:0 6px 18px rgba(0,0,0,0.5);}
   .avatar img{width:100%;height:100%;object-fit:cover;}
-  .name{font-size:22px;font-weight:700;margin:0;min-height:28px;}
-  .role{font-size:14px;color:var(--muted);min-height:20px;}
-  .platforms{display:flex;flex-direction:column;gap:10px;width:100%;}
+  .name{font-size:24px;font-weight:700;margin:0;}
+  .role{font-size:14px;color:var(--muted);margin-bottom:18px;}
+  .platforms{display:flex;flex-direction:column;gap:10px;}
   .link{
-    display:flex;align-items:center;gap:8px;
-    padding:10px 12px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:12px;border-radius:12px;
     background:rgba(255,255,255,0.05);
     text-decoration:none;color:var(--text);font-weight:600;
     transition:transform .2s,box-shadow .2s,background .2s;
@@ -45,11 +44,11 @@
 
   /* Audio controls pinned top-right */
   #audio-controls{
-    position:fixed;top:10px;right:10px;
-    background:rgba(15,15,20,0.85);
-    padding:12px 16px;border-radius:16px;
-    display:flex;flex-direction:column;gap:10px;
-    font-size:12px;width:220px;
+    position:fixed;top:15px;right:15px;
+    background:rgba(20,20,30,0.9);
+    padding:10px 14px;border-radius:14px;
+    display:flex;flex-direction:column;gap:8px;
+    font-size:12px;width:250px;
     box-shadow:0 4px 14px rgba(0,0,0,0.4);
     z-index:999;
   }
@@ -63,23 +62,19 @@
   #control-buttons button:hover{background:#4752c4;}
   #audio-controls label{font-size:11px;color:var(--muted);}
   #audio-controls input[type=range]{
-    width:100%;
-    -webkit-appearance:none;
+    width:100%;-webkit-appearance:none;
     background:rgba(255,255,255,0.15);
     height:5px;border-radius:5px;outline:none;
   }
   #audio-controls input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;appearance:none;
-    width:14px;height:14px;border-radius:50%;
+    -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
     background:var(--accent);cursor:pointer;
   }
 
   /* Discord status box */
   #discord-box{
-    margin-top:14px;
-    background:rgba(0,0,0,0.5);
-    border-radius:12px;
-    padding:10px;
+    background:rgba(0,0,0,0.4);
+    border-radius:10px;padding:8px;
     display:flex;align-items:center;gap:10px;
   }
   #discord-box img{width:36px;height:36px;border-radius:50%;}
@@ -90,28 +85,26 @@
 <body>
 <div class="wrap" id="profile">
   <main class="card">
-    <section class="left">
-      <div class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" alt="Avatar"></div>
-      <h1 class="name" id="display-name"></h1>
-      <p class="role" id="role"></p>
-      <div class="platforms">
-        <!-- Discord -->
-        <a class="link" href="https://discord.gg/akadmin" target="_blank">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.369a19.79..."/></svg>
-          Discord
-        </a>
-        <!-- Roblox -->
-        <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2l20 4-4 20-20-4 4-20zM9.3 9.3l5.4 1.1-1.1 5.4-5.4-1.1 1.1-5.4z"/></svg>
-          Roblox
-        </a>
-        <!-- Email -->
-        <a class="link" href="mailto:suzakfv@gmail.com">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2v12h16V6l-8 5-8-5z"/></svg>
-          Email
-        </a>
-      </div>
-    </section>
+    <div class="avatar"><img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar"></div>
+    <h1 class="name" id="display-name"></h1>
+    <p class="role" id="role"></p>
+    <div class="platforms">
+      <!-- Discord -->
+      <a class="link" href="https://discord.gg/akadmin" target="_blank">
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515..."/></svg>
+        Discord
+      </a>
+      <!-- Roblox -->
+      <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2l20 4-4 20-20-4 4-20zM9.3 9.3l5.4 1.1-1.1 5.4-5.4-1.1 1.1-5.4z"/></svg>
+        Roblox
+      </a>
+      <!-- Email -->
+      <a class="link" href="mailto:suzakfv@gmail.com">
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2v12h16V6l-8 5-8-5z"/></svg>
+        Email
+      </a>
+    </div>
   </main>
 </div>
 
@@ -129,7 +122,7 @@
   
   <!-- Discord status -->
   <div id="discord-box">
-    <img id="discord-avatar" src="" alt="discord avatar">
+    <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="discord avatar">
     <div id="discord-info">
       <span id="discord-username">Loading...</span>
       <span id="discord-status">...</span>
@@ -166,24 +159,13 @@ const volume=document.getElementById("volume");
 const speed=document.getElementById("speed");
 
 document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:true});
+playpause.addEventListener("click",()=>{if(audio.paused){audio.play();} else {audio.pause();}});
+audio.addEventListener("timeupdate",()=>{progress.value=(audio.currentTime/audio.duration)*100||0;});
+progress.addEventListener("input",()=>{audio.currentTime=(progress.value/100)*audio.duration;});
+volume.addEventListener("input",()=>{audio.volume=volume.value/100;});
+speed.addEventListener("input",()=>{audio.playbackRate=speed.value/100;});
 
-playpause.addEventListener("click",()=>{
-  if(audio.paused){audio.play();} else {audio.pause();}
-});
-audio.addEventListener("timeupdate",()=>{
-  progress.value=(audio.currentTime/audio.duration)*100||0;
-});
-progress.addEventListener("input",()=>{
-  audio.currentTime=(progress.value/100)*audio.duration;
-});
-volume.addEventListener("input",()=>{
-  audio.volume=volume.value/100;
-});
-speed.addEventListener("input",()=>{
-  audio.playbackRate=speed.value/100;
-});
-
-/* === Discord Status (via Lanyard API) === */
+/* === Discord Status (live) === */
 async function loadDiscord(){
   const res=await fetch("https://api.lanyard.rest/v1/users/937401074577465375");
   const data=await res.json();
@@ -195,6 +177,7 @@ async function loadDiscord(){
   }
 }
 loadDiscord();
+setInterval(loadDiscord, 10000); // refresh every 10s
 </script>
 </body>
 </html>
