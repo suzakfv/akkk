@@ -11,50 +11,73 @@
     --muted:rgba(233,238,246,0.7);
     --accent-color:#5865f2;
   }
-
   html,body{
-    height:100%;
-    margin:0;
+    height:100%;margin:0;
     font-family:Inter,system-ui,sans-serif;
     background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.6)),center/cover no-repeat var(--bg);
     color:var(--text);
+    display:flex;align-items:center;justify-content:center;
   }
 
-  .wrap{min-height:100%;display:grid;place-items:center;padding:48px 20px;}
+  /* Drag screen */
+  #drop-screen{
+    position:fixed;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;text-align:center;
+    background:rgba(0,0,0,0.8);
+    z-index:1000;color:var(--text);
+    font-size:18px;cursor:pointer;
+  }
+  #drop-screen.dragover{background:rgba(88,101,242,0.4);}
+  #drop-screen p{margin:12px 0;}
+
+  /* Profile card */
+  .wrap{display:none;min-height:100%;place-items:center;padding:20px;}
   .card{
     max-width:900px;width:100%;
     padding:28px;border-radius:18px;
     background:rgba(255,255,255,0.06);
     backdrop-filter:blur(12px) saturate(120%);
     box-shadow:0 10px 30px rgba(0,0,0,0.5);
-    display:flex;gap:24px;align-items:center;
+    display:flex;gap:24px;align-items:center;justify-content:center;
   }
   .left{min-width:220px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;}
   .avatar{width:128px;height:128px;border-radius:20px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.5);}
-  .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
-  .name{font-size:22px;font-weight:700;margin:0;}
+  .avatar img{width:100%;height:100%;object-fit:cover;}
+  .name{font-size:22px;font-weight:700;margin:0;min-height:28px;}
   .role{font-size:14px;color:var(--muted);min-height:20px;}
-  .platforms{display:flex;flex-direction:column;gap:10px;width:100%;}
+  .bio{font-size:15px;color:var(--muted);margin-bottom:10px;min-height:40px;}
 
+  .platforms{display:flex;flex-direction:column;gap:10px;width:100%;}
   .link{
     display:flex;align-items:center;gap:8px;
     padding:10px 12px;border-radius:12px;
     background:rgba(255,255,255,0.05);
     text-decoration:none;color:var(--text);font-weight:600;
-    transition:transform .2s,box-shadow .2s;
+    transition:transform .2s,box-shadow .2s,background .2s;
   }
-  .link:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,255,255,0.2);}
+  .link:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);}
   .link svg{width:18px;height:18px;}
 
-  .bio{font-size:15px;color:var(--muted);margin-bottom:10px;}
-
-  @media(max-width:800px){
-    .card{flex-direction:column;}
+  /* Audio UI */
+  #audio-controls{
+    margin-top:12px;
+    display:flex;align-items:center;gap:10px;
   }
+  #progress{flex:1;}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<!-- Drag & Drop Setup -->
+<div id="drop-screen">
+  <h2>🎵 Drop an audio file</h2>
+  <p>Drag your MP3/WAV here to set background music.</p>
+  <small>(It will be saved in your browser)</small>
+</div>
+
+<!-- Profile -->
+<div class="wrap" id="profile">
   <main class="card">
     <section class="left">
       <div class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" alt="Avatar"></div>
@@ -72,26 +95,26 @@
           Roblox
         </a>
         <!-- Email -->
-        <a class="link" href="suzakfv@gamil.com">
+        <a class="link" href="mailto:suzakfv@gmail.com">
           ✉️ Email
         </a>
       </div>
+      <!-- Audio UI -->
+      <div id="audio-controls" style="display:none;">
+        <button id="playpause">⏯</button>
+        <input type="range" id="progress" value="0" min="0" max="100">
+      </div>
     </section>
     <section class="right">
-      <p class="bio">fuck me pls.</p>
-      <!-- Discord widget -->
-      <iframe src=""
-              width="320" height="200" allowtransparency="true" frameborder="0"
-              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+      <p class="bio" id="bio"></p>
     </section>
   </main>
 </div>
 
-<!-- Audio -->
-<audio id="bg-audio" src="https://raw.githubusercontent.com/REPLACE_USER/REPLACE_REPO/main/REPLACE_AUDIO.mp3" autoplay loop></audio>
+<audio id="bg-audio" loop></audio>
 
 <script>
-/* ===== Typewriter Effect ===== */
+/* === Typewriter === */
 function typeWriter(el,text,delay=75,callback){
   let i=0;
   function type(){
@@ -102,20 +125,66 @@ function typeWriter(el,text,delay=75,callback){
   }
   type();
 }
-const displayName="suzak"; // <-- change if needed
-const roleText=""; // tagline
+const displayName="suzak";
+const roleText="Developer / Creator";
+const bioText="Building cool Roblox scripts since 2022.";
 document.title="";
 typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
   typeWriter(document.querySelector("#role"),roleText,60);
 });
 typeWriter(document.querySelector("#page-title"),displayName,150);
+typeWriter(document.querySelector("#bio"),bioText,40);
 
-/* ===== Optional: play audio only after user interaction (autoplay policies) ===== */
+/* === Audio Handling === */
+const dropScreen=document.getElementById("drop-screen");
+const profile=document.getElementById("profile");
 const audio=document.getElementById("bg-audio");
-document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:true});
+const playpause=document.getElementById("playpause");
+const progress=document.getElementById("progress");
+const controls=document.getElementById("audio-controls");
+
+// Check if saved audio exists
+const saved=localStorage.getItem("customAudio");
+if(saved){
+  audio.src=saved;
+  dropScreen.style.display="none";
+  profile.style.display="grid";
+  controls.style.display="flex";
+}
+
+/* Drag & Drop */
+dropScreen.addEventListener("dragover",e=>{
+  e.preventDefault();dropScreen.classList.add("dragover");
+});
+dropScreen.addEventListener("dragleave",()=>dropScreen.classList.remove("dragover"));
+dropScreen.addEventListener("drop",e=>{
+  e.preventDefault();dropScreen.classList.remove("dragover");
+  const file=e.dataTransfer.files[0];
+  if(file && file.type.startsWith("audio/")){
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const data=ev.target.result;
+      audio.src=data;
+      localStorage.setItem("customAudio",data);
+      dropScreen.style.display="none";
+      profile.style.display="grid";
+      controls.style.display="flex";
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+/* Audio UI */
+playpause.addEventListener("click",()=>{
+  if(audio.paused){audio.play();} else {audio.pause();}
+});
+audio.addEventListener("timeupdate",()=>{
+  progress.value=(audio.currentTime/audio.duration)*100||0;
+});
+progress.addEventListener("input",()=>{
+  audio.currentTime=(progress.value/100)*audio.duration;
+});
 </script>
 </body>
 </html>
-
-
 
