@@ -7,177 +7,306 @@
 <style>
   :root{
     --bg: url('https://giffiles.alphacoders.com/222/222699.gif');
-    --text:#e9eef6;
-    --muted:rgba(233,238,246,0.7);
-    --accent:#5865f2;
+    --card-bg: rgba(24,24,28,0.6);
+    --muted: #bfc8d6;
+    --text: #e9eef6;
+    --accent: #7a7dff;
   }
   html,body{
-    height:100%;margin:0;
-    font-family:Inter,system-ui,sans-serif;
-    background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.6)),center/cover no-repeat var(--bg);
+    height:100%;
+    margin:0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.6)), center/cover no-repeat var(--bg);
     color:var(--text);
-    display:flex;align-items:center;justify-content:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
-  .wrap{padding:20px;display:grid;place-items:center;width:100%;}
-  .card{
-    max-width:400px;width:100%;
-    padding:32px;border-radius:20px;
-    background:rgba(20,20,20,0.6);
-    backdrop-filter:blur(16px) saturate(120%);
-    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+
+  /* CENTER CARD */
+  .card {
+    width:360px;
+    border-radius:18px;
+    padding:34px 28px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px) saturate(120%);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.6);
     text-align:center;
   }
-  .avatar{width:120px;height:120px;border-radius:18px;overflow:hidden;margin:0 auto 16px;box-shadow:0 6px 18px rgba(0,0,0,0.5);}
-  .avatar img{width:100%;height:100%;object-fit:cover;}
-  .name{font-size:24px;font-weight:700;margin:0;}
-  .role{font-size:14px;color:var(--muted);margin-bottom:18px;}
-  .platforms{display:flex;flex-direction:column;gap:10px;}
-  .link{
-    display:flex;align-items:center;justify-content:center;gap:10px;
-    padding:12px;border-radius:12px;
-    background:rgba(255,255,255,0.05);
-    text-decoration:none;color:var(--text);font-weight:600;
-    transition:transform .2s,box-shadow .2s,background .2s;
+  .avatar {
+    width:112px;height:112px;border-radius:16px;overflow:hidden;margin:0 auto 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
   }
-  .link:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);}
-  .link svg{width:18px;height:18px;}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+  .name {font-size:22px;font-weight:800;margin:6px 0;}
+  .role {font-size:13px;color:var(--muted);margin-bottom:18px;}
+  .platforms {display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .link {
+    display:flex;align-items:center;gap:10px;justify-content:center;
+    padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);
+    color:var(--text);text-decoration:none;font-weight:700;transition:transform .12s ease,box-shadow .12s ease;
+  }
+  .link:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.35);}
+  .link svg{width:18px;height:18px;opacity:0.95;flex-shrink:0;}
 
-  /* Audio controls pinned top-right */
-  #audio-controls{
-    position:fixed;top:15px;right:15px;
-    background:rgba(20,20,30,0.9);
-    padding:10px 14px;border-radius:14px;
-    display:flex;flex-direction:column;gap:8px;
-    font-size:12px;width:250px;
-    box-shadow:0 4px 14px rgba(0,0,0,0.4);
-    z-index:999;
+  /* TOP-RIGHT AUDIO PLAYER (compact & clean) */
+  #audio-player {
+    position:fixed; top:18px; right:18px; z-index:9999;
+    width:260px; background: linear-gradient(180deg, rgba(22,22,28,0.95), rgba(12,12,16,0.95));
+    border-radius:14px; padding:12px; box-shadow:0 12px 40px rgba(0,0,0,0.6);
+    color:var(--text); font-size:13px; backdrop-filter: blur(6px);
   }
-  #control-buttons{display:flex;gap:10px;justify-content:center;}
-  #control-buttons button{
-    background:var(--accent);border:none;color:white;
-    padding:6px 12px;border-radius:8px;
-    cursor:pointer;font-size:14px;font-weight:600;
-    transition:background 0.2s;
+  #ap-top {display:flex;align-items:center;justify-content:space-between;gap:8px}
+  #track-info{display:flex;align-items:center;gap:10px;min-width:0}
+  #track-name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+  #ap-buttons{display:flex;align-items:center;gap:8px}
+  button.icon {
+    background:linear-gradient(180deg,var(--accent),#5560ff);
+    border:none;color:white;padding:8px;border-radius:10px;cursor:pointer;font-weight:700;
+    box-shadow:0 6px 14px rgba(85,88,255,0.12);
   }
-  #control-buttons button:hover{background:#4752c4;}
-  #audio-controls label{font-size:11px;color:var(--muted);}
-  #audio-controls input[type=range]{
-    width:100%;-webkit-appearance:none;
-    background:rgba(255,255,255,0.15);
-    height:5px;border-radius:5px;outline:none;
-  }
-  #audio-controls input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
-    background:var(--accent);cursor:pointer;
-  }
+  /* Sliders */
+  .ap-row{margin-top:10px}
+  .ap-row label{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}
+  .slider {width:100%; -webkit-appearance:none; height:6px; background:rgba(255,255,255,0.08); border-radius:6px;outline:none}
+  .slider::-webkit-slider-thumb { -webkit-appearance:none; width:12px;height:12px;border-radius:50%; background:var(--accent); cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.4); }
 
-  /* Discord status box */
-  #discord-box{
-    background:rgba(0,0,0,0.4);
-    border-radius:10px;padding:8px;
-    display:flex;align-items:center;gap:10px;
+  /* Discord status block inside audio player */
+  #discord-status {
+    margin-top:10px; display:flex;gap:8px;align-items:center;background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;
   }
-  #discord-box img{width:36px;height:36px;border-radius:50%;}
-  #discord-info{display:flex;flex-direction:column;font-size:12px;}
-  #discord-status{font-size:11px;color:var(--muted);}
+  #discord-status img {width:36px;height:36px;border-radius:50%;}
+  .d-info {font-size:12px; text-align:left}
+  .d-info .user {font-weight:700}
+  .d-info .state {color:var(--muted); font-size:12px; margin-top:3px}
+
+  /* small responsive */
+  @media (max-width:420px){
+    .card{width:320px;padding:24px}
+    #audio-player{width:92%; left:4%; right:4%;}
+  }
 </style>
 </head>
 <body>
-<div class="wrap" id="profile">
-  <main class="card">
-    <div class="avatar"><img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar"></div>
-    <h1 class="name" id="display-name"></h1>
-    <p class="role" id="role"></p>
-    <div class="platforms">
-      <!-- Discord -->
-      <a class="link" href="https://discord.gg/akadmin" target="_blank">
-        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515..."/></svg>
-        Discord
-      </a>
-      <!-- Roblox -->
-      <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">
-        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 2l20 4-4 20-20-4 4-20zM9.3 9.3l5.4 1.1-1.1 5.4-5.4-1.1 1.1-5.4z"/></svg>
-        Roblox
-      </a>
-      <!-- Email -->
-      <a class="link" href="mailto:suzakfv@gmail.com">
-        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 2v12h16V6l-8 5-8-5z"/></svg>
-        Email
-      </a>
-    </div>
-  </main>
+
+<!-- Center profile card -->
+<div class="card" role="main" aria-label="profile">
+  <div class="avatar"><img id="avatar-img" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="avatar"></div>
+  <div class="name" id="display-name">suzak</div>
+  <div class="role" id="role">Developer / Creator</div>
+
+  <div class="platforms" aria-label="links">
+    <a class="link" href="https://discord.gg/akadmin" target="_blank" rel="noopener">
+      <!-- Discord SVG -->
+      <svg viewBox="0 0 71 55" fill="currentColor" aria-hidden="true"><path d="M60.3 4.2A58.5 58.5 0 0046.8.7c-.4.7-.8 1.6-1.1 2.3-3.5-.5-7-.5-10.5 0-.3-.8-.7-1.6-1.1-2.3A58.3 58.3 0 0010.7 4.2C1.8 20.4 3.3 36.8 3.3 36.8c7.4 5.2 14.3 8.3 20.9 10 1.6-2.2 3-4.5 4.2-6.9-3.6-1.1-6.8-2.8-9.6-4.8 0 0 .8-.6 2.1-1.5 4 .9 8.1 1.4 12 1.4s8.1-.5 12-1.4c1.3.9 2.1 1.5 2.1 1.5-2.8 2-6 3.7-9.6 4.8 1.2 2.4 2.6 4.7 4.2 6.9 6.6-1.7 13.5-4.8 20.9-10 0 0 1.5-16.4-8.4-32.6z"/></svg>
+      Discord
+    </a>
+
+    <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank" rel="noopener">
+      <!-- Roblox SVG -->
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 2.2L22 6l-4 18L-2 14 2 2.2zM9 9l5 1-1 5-5-1 1-5z"/></svg>
+      Roblox
+    </a>
+
+    <a class="link" href="mailto:suzakfv@gmail.com" rel="noopener">
+      <!-- Email SVG -->
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 4v16h20V4H2zm18 2v.8L12 12 4 6.8V6h16z"/></svg>
+      Email
+    </a>
+  </div>
 </div>
 
-<!-- Audio Player -->
-<div id="audio-controls">
-  <div id="control-buttons">
-    <button id="playpause">⏯</button>
+<!-- Audio player (top-right) -->
+<div id="audio-player" role="region" aria-label="audio player">
+  <div id="ap-top">
+    <div id="track-info">
+      <div id="track-name">AUDIO.mp3</div>
+    </div>
+    <div id="ap-buttons" aria-hidden="false">
+      <button id="btn-play" class="icon" aria-label="Play/Pause">▶</button>
+    </div>
   </div>
-  <label>Progress</label>
-  <input type="range" id="progress" value="0" min="0" max="100">
-  <label>Volume</label>
-  <input type="range" id="volume" value="100" min="0" max="100">
-  <label>Speed</label>
-  <input type="range" id="speed" value="100" min="50" max="200">
-  
-  <!-- Discord status -->
-  <div id="discord-box">
+
+  <div class="ap-row">
+    <label for="progress">Progress</label>
+    <input id="progress" class="slider" type="range" min="0" max="100" value="0" aria-label="progress">
+  </div>
+
+  <div class="ap-row">
+    <label for="volume">Volume</label>
+    <input id="volume" class="slider" type="range" min="0" max="100" value="100" aria-label="volume">
+  </div>
+
+  <div class="ap-row">
+    <label for="speed">Speed</label>
+    <input id="speed" class="slider" type="range" min="50" max="200" value="100" aria-label="speed">
+  </div>
+
+  <div id="discord-status" aria-live="polite">
     <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="discord avatar">
-    <div id="discord-info">
-      <span id="discord-username">Loading...</span>
-      <span id="discord-status">...</span>
+    <div class="d-info">
+      <div class="user" id="discord-username">Loading...</div>
+      <div class="state" id="discord-state">Connecting...</div>
     </div>
   </div>
 </div>
 
 <script>
-/* === Typewriter === */
-function typeWriter(el,text,delay=75,callback){
-  let i=0;
-  function type(){
-    if(i<text.length){
-      el.textContent += text.charAt(i);
-      i++; setTimeout(type,delay);
-    } else if(callback){callback();}
+/* ---------- CONFIG ---------- */
+/* Replace USERNAME/REPO with your repo that contains AUDIO.mp3 at main/AUDIO.mp3 */
+const GITHUB_AUDIO_URL = "https://raw.githubusercontent.com/USERNAME/REPO/main/AUDIO.mp3";
+/* Your Discord ID */
+const DISCORD_ID = "937401074577465375";
+/* refresh interval for discord presence (ms) */
+const LANYARD_REFRESH = 10000;
+/* ---------------------------- */
+
+/* ---------- UTILS ---------- */
+function qs(sel) { return document.querySelector(sel); }
+
+/* ---------- TYPEWRITER ---------- */
+(function(){
+  const displayName = "suzak";
+  const roleText = "Developer / Creator";
+  const elName = qs('#display-name');
+  const elRole = qs('#role');
+  function type(el, text, delay=60, done){
+    let i=0; el.textContent='';
+    (function t(){ if(i<text.length){ el.textContent += text[i++]; setTimeout(t,delay);} else if(done) done(); })();
   }
-  type();
+  type(elName, displayName, 80, ()=> type(elRole, roleText, 50));
+  // title
+  (function tit(){ let t=''; let i=0; const full = displayName; (function f(){ if(i<full.length){ t+=full[i++]; document.title=t; setTimeout(f,140);} })(); })();
+})();
+
+/* ---------- AUDIO SETUP (JS-controlled) ---------- */
+const audio = new Audio();
+audio.src = GITHUB_AUDIO_URL;
+audio.preload = 'auto';
+audio.crossOrigin = 'anonymous'; // helps when hosting from raw.githubusercontent (if needed)
+audio.loop = true;
+
+const btnPlay = qs('#btn-play');
+const progress = qs('#progress');
+const volume = qs('#volume');
+const speed = qs('#speed');
+const trackName = qs('#track-name');
+
+trackName.textContent = 'AUDIO.mp3';
+
+/* Ensure UI reacts to user gesture for autoplay policy */
+let attemptedPlay = false;
+document.addEventListener('click', () => {
+  if (!attemptedPlay) {
+    audio.play().catch(()=>{/* still fine if blocked */});
+    attemptedPlay = true;
+  }
+}, { once: true });
+
+/* Play/pause toggle */
+function updatePlayButton(){
+  btnPlay.textContent = audio.paused ? '▶' : '⏸';
+  btnPlay.setAttribute('aria-pressed', (!audio.paused).toString());
 }
-const displayName="suzak";
-const roleText="Developer / Creator";
-document.title="";
-typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
-  typeWriter(document.querySelector("#role"),roleText,60);
+btnPlay.addEventListener('click', ()=>{
+  if (audio.paused) audio.play().catch(()=>{}); else audio.pause();
+  updatePlayButton();
 });
-typeWriter(document.querySelector("#page-title"),displayName,150);
 
-/* === Audio Controls === */
-const audio=new Audio("https://raw.githubusercontent.com/USERNAME/REPO/main/AUDIO.mp3");
-audio.loop=true;
-const playpause=document.getElementById("playpause");
-const progress=document.getElementById("progress");
-const volume=document.getElementById("volume");
-const speed=document.getElementById("speed");
+/* When metadata is ready, update duration-related behavior */
+audio.addEventListener('loadedmetadata', ()=>{
+  // nothing else needed, timeupdate will handle UI
+});
 
-document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:true});
-playpause.addEventListener("click",()=>{if(audio.paused){audio.play();} else {audio.pause();}});
-audio.addEventListener("timeupdate",()=>{progress.value=(audio.currentTime/audio.duration)*100||0;});
-progress.addEventListener("input",()=>{audio.currentTime=(progress.value/100)*audio.duration;});
-volume.addEventListener("input",()=>{audio.volume=volume.value/100;});
-speed.addEventListener("input",()=>{audio.playbackRate=speed.value/100;});
+/* Time update -> progress */
+audio.addEventListener('timeupdate', ()=>{
+  if (isFinite(audio.duration) && audio.duration > 0) {
+    const pct = (audio.currentTime / audio.duration) * 100;
+    progress.value = Math.max(0, Math.min(100, pct));
+  } else {
+    progress.value = 0;
+  }
+});
 
-/* === Discord Status (live) === */
-async function loadDiscord(){
-  const res=await fetch("https://api.lanyard.rest/v1/users/937401074577465375");
-  const data=await res.json();
-  if(data.success){
-    const d=data.data;
-    document.getElementById("discord-avatar").src=`https://cdn.discordapp.com/avatars/${d.discord_user.id}/${d.discord_user.avatar}.png`;
-    document.getElementById("discord-username").textContent=d.discord_user.username+"#"+d.discord_user.discriminator;
-    document.getElementById("discord-status").textContent=d.discord_status;
+/* Seek */
+let seeking = false;
+progress.addEventListener('input', ()=> {
+  seeking = true;
+  if (isFinite(audio.duration) && audio.duration > 0) {
+    audio.currentTime = (progress.value / 100) * audio.duration;
+  }
+});
+progress.addEventListener('change', ()=> { seeking = false; });
+
+/* Volume */
+volume.addEventListener('input', ()=> { audio.volume = (volume.value / 100); });
+
+/* Speed */
+speed.addEventListener('input', ()=> { audio.playbackRate = (speed.value / 100); });
+
+/* Reflect audio pause/play */
+audio.addEventListener('play', updatePlayButton);
+audio.addEventListener('pause', updatePlayButton);
+updatePlayButton(); // initial
+
+/* Preload attempt (and graceful fallback) */
+fetch(GITHUB_AUDIO_URL, { method: 'HEAD' }).then(res => {
+  // if HEAD succeeded, we can keep playing via audio.src
+}).catch(()=> {
+  // show user-friendly note in track name if audio fails to fetch
+  trackName.textContent = 'AUDIO.mp3 (not found)';
+});
+
+/* ---------- LANYARD / DISCORD PRESENCE ---------- */
+const discordAvatar = qs('#discord-avatar');
+const discordUsername = qs('#discord-username');
+const discordState = qs('#discord-state');
+
+async function fetchDiscordPresence(){
+  try {
+    const r = await fetch('https://api.lanyard.rest/v1/users/' + DISCORD_ID);
+    if (!r.ok) throw new Error('lanyard fetch failed');
+    const j = await r.json();
+    if (!j.success) throw new Error('lanyard returned success=false');
+    const d = j.data;
+    // avatar: some users may have null avatar; build url accordingly
+    if (d.discord_user && d.discord_user.avatar != null) {
+      discordAvatar.src = `https://cdn.discordapp.com/avatars/${d.discord_user.id}/${d.discord_user.avatar}.png?size=128`;
+    } else {
+      discordAvatar.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+    }
+    const name = d.discord_user ? `${d.discord_user.username}#${d.discord_user.discriminator}` : 'Unknown';
+    discordUsername.textContent = name;
+    // compose status + activity info
+    let statusText = d.discord_status || 'offline';
+    if (d.active_on_discord_web || d.active_on_discord_mobile) {
+      // prefer activity details if present
+      if (d.listening_to_spotify) {
+        statusText = `Listening to ${d.spotify.song || 'Spotify'}`;
+      } else if (d.activities && d.activities.length) {
+        const act = d.activities[0];
+        statusText = (act.name ? act.name : 'Active');
+        if (act.state) statusText += ` — ${act.state}`;
+      } else {
+        statusText = d.discord_status;
+      }
+    }
+    discordState.textContent = statusText;
+  } catch (err) {
+    discordAvatar.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+    discordUsername.textContent = 'Discord';
+    discordState.textContent = 'Status unavailable';
+    // console.warn(err);
   }
 }
-loadDiscord();
-setInterval(loadDiscord, 10000); // refresh every 10s
+fetchDiscordPresence();
+setInterval(fetchDiscordPresence, LANYARD_REFRESH);
+
+/* ---------- Accessibility / small polish ---------- */
+/* If audio errors, reflect in UI */
+audio.addEventListener('error', () => {
+  trackName.textContent = 'AUDIO.mp3 (error loading)';
+});
 </script>
 </body>
 </html>
