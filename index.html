@@ -57,7 +57,7 @@
 <div class="wrap">
   <main class="card">
     <section class="left">
-      <div class="avatar"><img src="REPLACE_AVATAR_URL" alt="Avatar"></div>
+      <div class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" alt="Avatar"></div>
       <h1 class="name" id="display-name"></h1>
       <p class="role" id="role"></p>
       <div class="platforms">
@@ -80,7 +80,7 @@
     <section class="right">
       <p class="bio">fuck me pls.</p>
       <!-- Discord widget -->
-      <iframe src="https://discord.com/widget?id=REPLACE_DISCORD_SERVER_ID&theme=dark"
+      <iframe src=""
               width="320" height="200" allowtransparency="true" frameborder="0"
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
     </section>
@@ -103,7 +103,7 @@ function typeWriter(el,text,delay=75,callback){
   type();
 }
 const displayName="suzak"; // <-- change if needed
-const roleText="fuck me pls"; // tagline
+const roleText=""; // tagline
 document.title="";
 typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
   typeWriter(document.querySelector("#role"),roleText,60);
@@ -116,5 +116,6 @@ document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:t
 </script>
 </body>
 </html>
+
 
 
