@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>suzak</title>
 
-<!-- 🌟 Website Icon (Favicon) -->
+<!-- 🌟 Favicon -->
 <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" />
 
 <style>
@@ -101,6 +101,24 @@ footer {
   color: var(--text);
   transform: scale(1.1);
 }
+
+/* Discord button */
+.discord-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(88,101,242,0.15);
+  color: #e9eef6;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+.discord-btn:hover {
+  background: rgba(88,101,242,0.25);
+  transform: scale(1.05);
+}
 </style>
 </head>
 <body>
@@ -115,7 +133,11 @@ footer {
     </div>
     <div class="track glass" id="track"></div>
     <div class="waveform glass" id="wave"></div>
+
+    <!-- discord button -->
+    <a href="https://discord.gg/akadmin" target="_blank" class="discord-btn">Join ak</a>
   </div>
+
   <footer>
     <div class="icons">
       <a href="#">👁</a>
@@ -126,65 +148,44 @@ footer {
   </footer>
 
 <script>
-// Audio setup
+// 🎵 Audio
 const audio = new Audio("https://raw.githubusercontent.com/suzakfv/akkk/main/AUDIO.mp3");
 audio.loop = true;
 audio.volume = 0.7;
 
-// click to start
 document.body.addEventListener("click", () => {
   audio.play().catch(e=>console.log("blocked:", e));
 }, {once:true});
 
-// volume slider
 document.getElementById("volume").addEventListener("input", e=>{
   audio.volume = e.target.value / 100;
 });
 
-// fake waveform animation
+// fake waveform
 const wave = document.getElementById("wave");
 setInterval(()=>{
   wave.style.background = `linear-gradient(to top, #3af ${Math.random()*100}%, transparent 100%)`;
 }, 200);
 
-// 🎹 Typewriter effect (looping)
+// typewriter
 function typeWriterLoop(element, text, speed=100, pause=1500) {
-  let i = 0;
-  let deleting = false;
-
+  let i = 0, deleting = false;
   function type() {
-    if (!deleting && i <= text.length) {
-      element.textContent = text.substring(0, i);
-      i++;
-    } else if (deleting && i >= 0) {
-      element.textContent = text.substring(0, i);
-      i--;
-    }
+    if (!deleting && i <= text.length) { element.textContent = text.substring(0, i); i++; }
+    else if (deleting && i >= 0) { element.textContent = text.substring(0, i); i--; }
 
-    if (i > text.length) {
-      deleting = true;
-      setTimeout(type, pause); // pause before deleting
-      return;
-    }
-    if (i < 0) {
-      deleting = false;
-      setTimeout(type, pause); // pause before typing again
-      return;
-    }
+    if (i > text.length) { deleting = true; setTimeout(type, pause); return; }
+    if (i < 0) { deleting = false; setTimeout(type, pause); return; }
     setTimeout(type, deleting ? speed/2 : speed);
   }
   type();
 }
 
-// Track title typing loop
 const trackEl = document.getElementById("track");
-typeWriterLoop(trackEl, "kys     .gg/akadmin");
+typeWriterLoop(trackEl, "go fuck your self");
 
-// Website tab title typing loop
 const siteTitle = document.querySelector("title");
 typeWriterLoop(siteTitle, "suzak");
 </script>
 </body>
 </html>
-
-
