@@ -3,225 +3,186 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title id="page-title">Loading...</title>
+<title>suzak</title>
+
+<!-- 🌟 Website Icon (Favicon) -->
+<link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" />
+
 <style>
-  :root{
-    --bg: url('https://i.pinimg.com/originals/85/93/f1/8593f1ed6c8502a1e743d806873df28b.gif');
-    --text:#e9eef6;
-    --muted:rgba(233,238,246,0.7);
-  }
-  html,body{
-    height:100%;margin:0;
-    font-family:Inter,system-ui,sans-serif;
-    background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.6)),center/cover no-repeat var(--bg);
-    color:var(--text);
-    display:flex;align-items:center;justify-content:center;
-  }
-  .wrap{padding:20px;display:grid;place-items:center;width:100%;gap:20px;}
-  .card{
-    max-width:900px;width:100%;
-    padding:28px;border-radius:18px;
-    background:rgba(255,255,255,0.06);
-    backdrop-filter:blur(12px) saturate(120%);
-    box-shadow:0 10px 30px rgba(0,0,0,0.5);
-    display:flex;gap:24px;align-items:center;justify-content:center;
-  }
-  .left{min-width:220px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;}
-  .avatar{width:128px;height:128px;border-radius:20px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.5);}
-  .avatar img{width:100%;height:100%;object-fit:cover;}
-  .name{font-size:22px;font-weight:700;margin:0;min-height:28px;}
-  .role{font-size:14px;color:var(--muted);min-height:20px;}
-  .platforms{display:flex;flex-direction:column;gap:10px;width:100%;}
-  .link{
-    display:flex;align-items:center;gap:12px;
-    padding:12px 16px;border-radius:12px;
-    background:rgba(255,255,255,0.05);
-    text-decoration:none;color:var(--text);font-weight:600;
-    transition:transform .2s,box-shadow .2s,background .2s;
-    font-size:14px;
-  }
-  .link:hover{transform:scale(1.05);box-shadow:0 0 12px rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);}
-  .link svg{width:20px;height:20px;flex-shrink:0;}
+:root {
+  --bg: url("https://images.steamusercontent.com/ugc/535146042280165021/BD73EB57AB0F64EB01896B97C671BC9502B07748/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false");
+  --card-bg: rgba(255,255,255,0.05);
+  --text: #e9eef6;
+  --muted: rgba(233,238,246,0.65);
+  --radius: 16px;
+  --blur: 14px;
+  --shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
 
-  /* Discord widget styling - REMOVED */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: center/cover no-repeat var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--text);
+}
 
-  @media (max-width: 768px) {
-    .card{flex-direction:column;text-align:center;}
-  }
+* { transition: all 0.25s ease; }
+
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--blur)) saturate(120%);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.card {
+  text-align: center;
+  padding: 28px;
+  width: 320px;
+}
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 14px;
+  box-shadow: var(--shadow);
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.name { font-size: 20px; font-weight: 700; margin: 8px 0 2px; }
+.id { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.volume-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.volume-control input { width: 130px; }
+.track {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid var(--text);
+}
+.waveform {
+  margin-top: 16px;
+  height: 60px;
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.icons {
+  margin-top: 10px;
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+}
+.icons a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 20px;
+}
+.icons a:hover {
+  color: var(--text);
+  transform: scale(1.1);
+}
 </style>
 </head>
 <body>
-<div class="wrap" id="profile">
-  <main class="card">
-    <section class="left">
-      <div class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" alt="Avatar"></div>
-      <h1 class="name" id="display-name"></h1>
-      <p class="role" id="role"></p>
-      <div class="platforms">
-        <a class="link" href="https://discord.gg/akadmin" target="_blank">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.193.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
-          </svg>
-          Discord
-        </a>
-        <a class="link" href="https://www.roblox.com/users/8717143377/profile" target="_blank">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M7.5 7.5L16.5 16.5L7.5 16.5z"/>
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-          </svg>
-          Roblox
-        </a>
-        <a class="link" href="mailto:suzakfv@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="m4 4 16 0c1.1 0 2 .9 2 2l0 12c0 1.1-.9 2-2 2l-16 0c-1.1 0-2-.9-2-2l0-12c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
-          Email
-        </a>
-      </div>
-    </section>
-  </main>
-</div>
-
-<!-- Audio UI -->
-
-</div>
+  <div class="card glass">
+    <div class="avatar">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" alt="Avatar">
+    </div>
+    <div class="name">suzak</div>
+    <div class="id">9/11</div>
+    <div class="volume-control glass">
+      🔊 <input id="volume" type="range" min="0" max="100" value="70">
+    </div>
+    <div class="track glass" id="track"></div>
+    <div class="waveform glass" id="wave"></div>
+  </div>
+  <footer>
+    <div class="icons">
+      <a href="#">👁</a>
+      <a href="#">⚙</a>
+      <a href="https://github.com/"></a>
+    </div>
+    <p>© 2025 suzakfv</p>
+  </footer>
 
 <script>
-/* === Typewriter === */
-function typeWriter(el,text,delay=75,callback){
-  let i=0;
-  function type(){
-    if(i<text.length){
-      el.textContent += text.charAt(i);
-      i++; setTimeout(type,delay);
-    } else if(callback){callback();}
+// Audio setup
+const audio = new Audio("https://raw.githubusercontent.com/suzakfv/akkk/main/AUDIO.mp3");
+audio.loop = true;
+audio.volume = 0.7;
+
+// click to start
+document.body.addEventListener("click", () => {
+  audio.play().catch(e=>console.log("blocked:", e));
+}, {once:true});
+
+// volume slider
+document.getElementById("volume").addEventListener("input", e=>{
+  audio.volume = e.target.value / 100;
+});
+
+// fake waveform animation
+const wave = document.getElementById("wave");
+setInterval(()=>{
+  wave.style.background = `linear-gradient(to top, #3af ${Math.random()*100}%, transparent 100%)`;
+}, 200);
+
+// 🎹 Typewriter effect (looping)
+function typeWriterLoop(element, text, speed=100, pause=1500) {
+  let i = 0;
+  let deleting = false;
+
+  function type() {
+    if (!deleting && i <= text.length) {
+      element.textContent = text.substring(0, i);
+      i++;
+    } else if (deleting && i >= 0) {
+      element.textContent = text.substring(0, i);
+      i--;
+    }
+
+    if (i > text.length) {
+      deleting = true;
+      setTimeout(type, pause); // pause before deleting
+      return;
+    }
+    if (i < 0) {
+      deleting = false;
+      setTimeout(type, pause); // pause before typing again
+      return;
+    }
+    setTimeout(type, deleting ? speed/2 : speed);
   }
   type();
 }
-const displayName="suzak";
-const roleText="kys nigger";
-document.title="";
-typeWriter(document.querySelector("#display-name"),displayName,90,()=>{
-  typeWriter(document.querySelector("#role"),roleText,60);
-});
-typeWriter(document.querySelector("#page-title"),displayName,150);
 
-/* === Audio Controls === */
-// Using your GitHub audio file - note: GitHub raw links may not work for audio streaming
-const audio = new Audio("https://raw.githubusercontent.com/suzakfv/akkk/main/AUDIO.mp3");
-audio.loop = true;
-audio.volume = 0.7; // Start at 70% volume
+// Track title typing loop
+const trackEl = document.getElementById("track");
+typeWriterLoop(trackEl, "kys     .gg/akadmin");
 
-const playpause = document.getElementById("playpause");
-const muteBtn = document.getElementById("mute");
-const progress = document.getElementById("progress");
-const volume = document.getElementById("volume");
-const speed = document.getElementById("speed");
-const nowPlaying = document.getElementById("now-playing");
-
-let isPlaying = false;
-let isMuted = false;
-let hasStarted = false;
-
-// Auto-play on first click anywhere
-document.body.addEventListener("click", () => {
-  if (!hasStarted) {
-    audio.play().then(() => {
-      isPlaying = true;
-      hasStarted = true;
-      playpause.textContent = "⏸️";
-      nowPlaying.textContent = "♪ Background Music Playing";
-    }).catch((e) => {
-      nowPlaying.textContent = "Audio blocked by browser";
-      console.log("Audio autoplay prevented:", e);
-    });
-  }
-}, {once: true});
-
-// Play/Pause button
-playpause.addEventListener("click", (e) => {
-  e.stopPropagation();
-  if (isPlaying) {
-    audio.pause();
-    playpause.textContent = "▶️";
-    nowPlaying.textContent = "Music paused";
-    isPlaying = false;
-  } else {
-    audio.play().then(() => {
-      playpause.textContent = "⏸️";
-      nowPlaying.textContent = "♪ Background Music Playing";
-      isPlaying = true;
-    }).catch((e) => {
-      nowPlaying.textContent = "Unable to play audio";
-    });
-  }
-});
-
-// Mute button
-muteBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  if (isMuted) {
-    audio.muted = false;
-    muteBtn.textContent = "🔊";
-    isMuted = false;
-  } else {
-    audio.muted = true;
-    muteBtn.textContent = "🔇";
-    isMuted = true;
-  }
-});
-
-// Progress bar
-audio.addEventListener("timeupdate", () => {
-  if (audio.duration) {
-    progress.value = (audio.currentTime / audio.duration) * 100;
-  }
-});
-
-progress.addEventListener("input", () => {
-  if (audio.duration) {
-    audio.currentTime = (progress.value / 100) * audio.duration;
-  }
-});
-
-// Volume control
-volume.addEventListener("input", () => {
-  audio.volume = volume.value / 100;
-  if (volume.value == 0) {
-    muteBtn.textContent = "🔇";
-  } else {
-    muteBtn.textContent = "🔊";
-  }
-});
-
-// Speed control
-speed.addEventListener("input", () => {
-  audio.playbackRate = speed.value / 100;
-});
-
-// Handle audio events
-audio.addEventListener("loadstart", () => {
-  nowPlaying.textContent = "Loading audio...";
-});
-
-audio.addEventListener("canplay", () => {
-  if (!hasStarted) {
-    nowPlaying.textContent = "Click anywhere to start music";
-  }
-});
-
-audio.addEventListener("error", () => {
-  nowPlaying.textContent = "Audio failed to load";
-});
-
-audio.addEventListener("ended", () => {
-  if (!audio.loop) {
-    isPlaying = false;
-    playpause.textContent = "▶️";
-    nowPlaying.textContent = "Music ended";
-  }
-});
+// Website tab title typing loop
+const siteTitle = document.querySelector("title");
+typeWriterLoop(siteTitle, "suzak");
 </script>
 </body>
 </html>
