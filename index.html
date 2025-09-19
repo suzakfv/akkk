@@ -154,7 +154,7 @@
 <script>
 /* ---------- CONFIG ---------- */
 /* Replace USERNAME/REPO with your repo that contains AUDIO.mp3 at main/AUDIO.mp3 */
-const GITHUB_AUDIO_URL = "https://raw.githubusercontent.com/USERNAME/REPO/main/AUDIO.mp3";
+const GITHUB_AUDIO_URL = "https://raw.githubusercontent.com/suzakfv/akkk/main/AUDIO.mp3";
 /* Your Discord ID */
 const DISCORD_ID = "937401074577465375";
 /* refresh interval for discord presence (ms) */
@@ -180,82 +180,31 @@ function qs(sel) { return document.querySelector(sel); }
 })();
 
 /* ---------- AUDIO SETUP (JS-controlled) ---------- */
-const audio = new Audio();
-audio.src = GITHUB_AUDIO_URL;
-audio.preload = 'auto';
-audio.crossOrigin = 'anonymous'; // helps when hosting from raw.githubusercontent (if needed)
-audio.loop = true;
+const audio=new Audio("https://raw.githubusercontent.com/USERNAME/REPO/main/AUDIO.mp3");
+audio.loop=true;
+const playpause=document.getElementById("playpause");
+const progress=document.getElementById("progress");
+const volume=document.getElementById("volume");
+const speed=document.getElementById("speed");
 
-const btnPlay = qs('#btn-play');
-const progress = qs('#progress');
-const volume = qs('#volume');
-const speed = qs('#speed');
-const trackName = qs('#track-name');
+document.body.addEventListener("click",()=>{audio.play().catch(()=>{});},{once:true});
 
-trackName.textContent = 'AUDIO.mp3';
-
-/* Ensure UI reacts to user gesture for autoplay policy */
-let attemptedPlay = false;
-document.addEventListener('click', () => {
-  if (!attemptedPlay) {
-    audio.play().catch(()=>{/* still fine if blocked */});
-    attemptedPlay = true;
-  }
-}, { once: true });
-
-/* Play/pause toggle */
-function updatePlayButton(){
-  btnPlay.textContent = audio.paused ? '▶' : '⏸';
-  btnPlay.setAttribute('aria-pressed', (!audio.paused).toString());
-}
-btnPlay.addEventListener('click', ()=>{
-  if (audio.paused) audio.play().catch(()=>{}); else audio.pause();
-  updatePlayButton();
+playpause.addEventListener("click",()=>{
+  if(audio.paused){audio.play();} else {audio.pause();}
+});
+audio.addEventListener("timeupdate",()=>{
+  progress.value=(audio.currentTime/audio.duration)*100||0;
+});
+progress.addEventListener("input",()=>{
+  audio.currentTime=(progress.value/100)*audio.duration;
+});
+volume.addEventListener("input",()=>{
+  audio.volume=volume.value/100;
+});
+speed.addEventListener("input",()=>{
+  audio.playbackRate=speed.value/100;
 });
 
-/* When metadata is ready, update duration-related behavior */
-audio.addEventListener('loadedmetadata', ()=>{
-  // nothing else needed, timeupdate will handle UI
-});
-
-/* Time update -> progress */
-audio.addEventListener('timeupdate', ()=>{
-  if (isFinite(audio.duration) && audio.duration > 0) {
-    const pct = (audio.currentTime / audio.duration) * 100;
-    progress.value = Math.max(0, Math.min(100, pct));
-  } else {
-    progress.value = 0;
-  }
-});
-
-/* Seek */
-let seeking = false;
-progress.addEventListener('input', ()=> {
-  seeking = true;
-  if (isFinite(audio.duration) && audio.duration > 0) {
-    audio.currentTime = (progress.value / 100) * audio.duration;
-  }
-});
-progress.addEventListener('change', ()=> { seeking = false; });
-
-/* Volume */
-volume.addEventListener('input', ()=> { audio.volume = (volume.value / 100); });
-
-/* Speed */
-speed.addEventListener('input', ()=> { audio.playbackRate = (speed.value / 100); });
-
-/* Reflect audio pause/play */
-audio.addEventListener('play', updatePlayButton);
-audio.addEventListener('pause', updatePlayButton);
-updatePlayButton(); // initial
-
-/* Preload attempt (and graceful fallback) */
-fetch(GITHUB_AUDIO_URL, { method: 'HEAD' }).then(res => {
-  // if HEAD succeeded, we can keep playing via audio.src
-}).catch(()=> {
-  // show user-friendly note in track name if audio fails to fetch
-  trackName.textContent = 'AUDIO.mp3 (not found)';
-});
 
 /* ---------- LANYARD / DISCORD PRESENCE ---------- */
 const discordAvatar = qs('#discord-avatar');
@@ -264,7 +213,7 @@ const discordState = qs('#discord-state');
 
 async function fetchDiscordPresence(){
   try {
-    const r = await fetch('https://api.lanyard.rest/v1/users/' + DISCORD_ID);
+    const r = await fetch('https://api.lanyard.rest/v1/users/' + 937401074577465375);
     if (!r.ok) throw new Error('lanyard fetch failed');
     const j = await r.json();
     if (!j.success) throw new Error('lanyard returned success=false');
@@ -305,8 +254,9 @@ setInterval(fetchDiscordPresence, LANYARD_REFRESH);
 /* ---------- Accessibility / small polish ---------- */
 /* If audio errors, reflect in UI */
 audio.addEventListener('error', () => {
-  trackName.textContent = 'AUDIO.mp3 (error loading)';
+  trackName.textContent = 'AUDIO.mp3 ';
 });
 </script>
 </body>
 </html>
+
