@@ -1,193 +1,571 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>suzak</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>suzak</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: url("https://gifdb.com/images/high/snowy-forest-background-l5ij2p0i5hv3uyhm.gif");
+            --card-bg: rgba(255,255,255,0.05);
+            --text: #e9eef6;
+            --muted: rgba(233,238,246,0.65);
+            --radius: 16px;
+            --blur: 14px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.6);
+            --accent: #3af;
+            --accent-hover: #5bf;
+            --pulse: rgba(58, 175, 255, 0.4);
+        }
 
-<!-- 🌟 Favicon -->
-<link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" />
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
 
-<style>
-:root {
-  --bg: url("https://i.imgur.com/4XbSyKw.gif");
-  --card-bg: rgba(255,255,255,0.05);
-  --text: #e9eef6;
-  --muted: rgba(233,238,246,0.65);
-  --radius: 16px;
-  --blur: 14px;
-  --shadow: 0 10px 30px rgba(0,0,0,0.6);
-}
+        body {
+            min-height: 100vh;
+            background: #0a0a14 center/cover no-repeat var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--text);
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  font-family: Inter, system-ui, sans-serif;
-  background: center/cover no-repeat var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  color: var(--text);
-}
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
 
-* { transition: all 0.25s ease; }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
 
-.glass {
-  background: var(--card-bg);
-  backdrop-filter: blur(var(--blur)) saturate(120%);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(20px);
+                opacity: 0;
+            }
+        }
 
-.card {
-  text-align: center;
-  padding: 28px;
-  width: 320px;
-}
-.avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto 14px;
-  box-shadow: var(--shadow);
-}
-.avatar img { width: 100%; height: 100%; object-fit: cover; }
-.name { font-size: 20px; font-weight: 700; margin: 8px 0 2px; }
-.id { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
-.volume-control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.volume-control input { width: 130px; }
-.track {
-  margin-top: 20px;
-  padding: 12px;
-  border-radius: var(--radius);
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid var(--text);
-}
-.waveform {
-  margin-top: 16px;
-  height: 60px;
-  width: 100%;
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-footer {
-  margin-top: 24px;
-  text-align: center;
-  font-size: 12px;
-  color: var(--muted);
-}
-.icons {
-  margin-top: 10px;
-  display: flex;
-  gap: 22px;
-  justify-content: center;
-}
-.icons a {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 20px;
-}
-.icons a:hover {
-  color: var(--text);
-  transform: scale(1.1);
-}
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--blur)) saturate(120%);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-/* Discord button */
-.discord-btn {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 16px;
-  border-radius: 12px;
-  background: rgba(88,101,242,0.15);
-  color: #e9eef6;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-}
-.discord-btn:hover {
-  background: rgba(88,101,242,0.25);
-  transform: scale(1.05);
-}
-</style>
+        .card {
+            text-align: center;
+            padding: 32px;
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 18px;
+            box-shadow: var(--shadow);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent), transparent, var(--accent));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .avatar:hover::after {
+            opacity: 1;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 8px 0 2px;
+            background: linear-gradient(to right, var(--text), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .id {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: var(--radius);
+        }
+
+        .volume-control input {
+            width: 150px;
+            height: 6px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .volume-control input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--pulse);
+            transition: all 0.2s ease;
+        }
+
+        .volume-control input::-webkit-slider-thumb:hover {
+            background: var(--accent-hover);
+            transform: scale(1.2);
+        }
+
+        .track {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: var(--radius);
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .track::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to right, transparent, var(--card-bg));
+        }
+
+        .waveform {
+            margin-top: 20px;
+            height: 80px;
+            width: 100%;
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            padding: 10px;
+        }
+
+        .bar {
+            width: 6px;
+            background: linear-gradient(to top, var(--accent), var(--accent-hover));
+            border-radius: 3px 3px 0 0;
+            transition: height 0.1s ease;
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .audio-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .audio-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .audio-btn:active {
+            transform: scale(0.95);
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .icons {
+            margin-top: 15px;
+            display: flex;
+            gap: 22px;
+            justify-content: center;
+        }
+
+        .icons a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .icons a:hover {
+            color: var(--text);
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Discord button */
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            background: rgba(88,101,242,0.15);
+            color: #e9eef6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(88,101,242,0.3);
+        }
+
+        .discord-btn:hover {
+            background: rgba(88,101,242,0.25);
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 var(--pulse);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(58, 175, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(58, 175, 255, 0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px;
+            }
+            
+            .avatar {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .name {
+                font-size: 22px;
+            }
+            
+            .waveform {
+                height: 60px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="card glass">
-    <div class="avatar">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" alt="Avatar">
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="card glass">
+        <div class="avatar">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1AFcmWycea4qrtAbRC4zpLEaw1DzLcys8R25y6IX6TExMKQ0E" alt="Avatar">
+        </div>
+        <div class="name">suzak</div>
+        <div class="id">9/11</div>
+        
+        <div class="volume-control glass">
+            <i class="fas fa-volume-up"></i>
+            <input id="volume" type="range" min="0" max="100" value="70">
+            <span id="volume-value">70%</span>
+        </div>
+        
+        <div class="audio-controls">
+            <button class="audio-btn" id="play-pause">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="audio-btn" id="stop">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+        
+        <div class="track glass" id="track"></div>
+        <div class="waveform glass" id="wave"></div>
+
+        <!-- Discord button -->
+        <a href="https://discord.gg/akadmin" target="_blank" class="discord-btn pulse">
+            <i class="fab fa-discord"></i> Join ak
+        </a>
     </div>
-    <div class="name">suzak</div>
-    <div class="id">9/11</div>
-    <div class="volume-control glass">
-      🔊 <input id="volume" type="range" min="0" max="100" value="70">
-    </div>
-    <div class="track glass" id="track"></div>
-    <div class="waveform glass" id="wave"></div>
 
-    <!-- discord button -->
-    <a href="https://discord.gg/akadmin" target="_blank" class="discord-btn">Join ak</a>
-  </div>
+    <footer>
+        <div class="icons">
+            <a href="#"><i class="fas fa-eye"></i></a>
+            <a href="#"><i class="fas fa-cog"></i></a>
+            <a href="https://github.com/"><i class="fab fa-github"></i></a>
+        </div>
+        <p>© 2025 suzakfv</p>
+    </footer>
 
-  <footer>
-    <div class="icons">
-      <a href="#">👁</a>
-      <a href="#">⚙</a>
-      <a href="https://github.com/"></a>
-    </div>
-    <p>© 2025 suzakfv</p>
-  </footer>
-
-<script>
-// 🎵 Audio
-const audio = new Audio("https://raw.githubusercontent.com/suzakfv/akkk/main/AUDIO.mp3");
-audio.loop = true;
-audio.volume = 0.7;
-
-document.body.addEventListener("click", () => {
-  audio.play().catch(e=>console.log("blocked:", e));
-}, {once:true});
-
-document.getElementById("volume").addEventListener("input", e=>{
-  audio.volume = e.target.value / 100;
-});
-
-// fake waveform
-const wave = document.getElementById("wave");
-setInterval(()=>{
-  wave.style.background = `linear-gradient(to top, #3af ${Math.random()*100}%, transparent 100%)`;
-}, 200);
-
-// typewriter
-function typeWriterLoop(element, text, speed=100, pause=1500) {
-  let i = 0, deleting = false;
-  function type() {
-    if (!deleting && i <= text.length) { element.textContent = text.substring(0, i); i++; }
-    else if (deleting && i >= 0) { element.textContent = text.substring(0, i); i--; }
-
-    if (i > text.length) { deleting = true; setTimeout(type, pause); return; }
-    if (i < 0) { deleting = false; setTimeout(type, pause); return; }
-    setTimeout(type, deleting ? speed/2 : speed);
-  }
-  type();
-}
-
-const trackEl = document.getElementById("track");
-typeWriterLoop(trackEl, "go fuck your self");
-
-const siteTitle = document.querySelector("title");
-typeWriterLoop(siteTitle, "suzak");
-</script>
+    <script>
+        // Create background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random position and animation delay
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Audio functionality
+        const audio = new Audio("https://raw.githubusercontent.com/suzakfv/akkk/main/AUDIO.mp3");
+        audio.loop = true;
+        audio.volume = 0.7;
+        
+        const playPauseBtn = document.getElementById('play-pause');
+        const stopBtn = document.getElementById('stop');
+        const volumeSlider = document.getElementById('volume');
+        const volumeValue = document.getElementById('volume-value');
+        const wave = document.getElementById('wave');
+        
+        // Create waveform bars
+        function createWaveform() {
+            wave.innerHTML = '';
+            const barCount = 40;
+            
+            for (let i = 0; i < barCount; i++) {
+                const bar = document.createElement('div');
+                bar.classList.add('bar');
+                bar.style.height = `${Math.random() * 60 + 10}%`;
+                wave.appendChild(bar);
+            }
+        }
+        
+        // Animate waveform
+        function animateWaveform() {
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                const newHeight = Math.random() * 80 + 10;
+                bar.style.height = `${newHeight}%`;
+                
+                // Change color based on height
+                if (newHeight > 70) {
+                    bar.style.background = 'linear-gradient(to top, #ff3a3a, #ff5b5b)';
+                } else if (newHeight > 50) {
+                    bar.style.background = 'linear-gradient(to top, #ffcc00, #ffdd33)';
+                } else {
+                    bar.style.background = 'linear-gradient(to top, var(--accent), var(--accent-hover))';
+                }
+            });
+        }
+        
+        // Play/pause functionality
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audio.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+        
+        // Stop functionality
+        stopBtn.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        });
+        
+        // Volume control
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            audio.volume = volume;
+            volumeValue.textContent = `${e.target.value}%`;
+            
+            // Change volume icon based on level
+            const volumeIcon = document.querySelector('.fa-volume-up');
+            if (volume === 0) {
+                volumeIcon.className = 'fas fa-volume-mute';
+            } else if (volume < 0.5) {
+                volumeIcon.className = 'fas fa-volume-down';
+            } else {
+                volumeIcon.className = 'fas fa-volume-up';
+            }
+        });
+        
+        // Typewriter effect
+        function typeWriterLoop(element, text, speed = 100, pause = 1500) {
+            let i = 0, deleting = false;
+            
+            function type() {
+                if (!deleting && i <= text.length) {
+                    element.textContent = text.substring(0, i);
+                    i++;
+                } else if (deleting && i >= 0) {
+                    element.textContent = text.substring(0, i);
+                    i--;
+                }
+                
+                if (i > text.length) {
+                    deleting = true;
+                    setTimeout(type, pause);
+                    return;
+                }
+                
+                if (i < 0) {
+                    deleting = false;
+                    setTimeout(type, pause);
+                    return;
+                }
+                
+                setTimeout(type, deleting ? speed / 2 : speed);
+            }
+            
+            type();
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            createWaveform();
+            
+            // Start waveform animation
+            setInterval(animateWaveform, 200);
+            
+            // Initialize typewriter effects
+            const trackEl = document.getElementById('track');
+            typeWriterLoop(trackEl, "go fuck your self", 120, 2000);
+            
+            const siteTitle = document.querySelector("title");
+            typeWriterLoop(siteTitle, "suzak", 150, 2500);
+            
+            // Auto-play audio on first interaction
+            document.body.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play().catch(e => console.log("Autoplay blocked:", e));
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            }, { once: true });
+        });
+    </script>
 </body>
 </html>
-
-
