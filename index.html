@@ -3,747 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>suzak.info - Bio Link Generator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>{name} - suzak.info</title>
+    <link rel="stylesheet" href="/styles.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary: #8a2be2;
-            --primary-dark: #6a1cb0;
-            --secondary: #ff6b6b;
-            --dark: #1a1a2e;
-            --darker: #0f0f1f;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
-            color: var(--light);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
+        .bio-page {
+            max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
+            padding: 40px 20px;
             text-align: center;
-            padding: 30px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 40px;
         }
-        
-        .logo {
+        .bio-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid #8a2be2;
+        }
+        .bio-name {
             font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
             margin-bottom: 10px;
+            background: linear-gradient(45deg, #8a2be2, #4cc9f0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        
-        .tagline {
-            color: var(--gray);
-            font-size: 1.2rem;
+        .bio-links {
+            margin-top: 30px;
         }
-        
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .creator-panel {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .preview-panel {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        h2 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
+        .bio-link {
             display: block;
-            margin-bottom: 8px;
-            color: var(--gray);
-        }
-        
-        input, textarea, select {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--light);
-            font-size: 1rem;
-        }
-        
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .btn {
-            background: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 15px;
+            text-decoration: none;
             color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-        
-        .btn i {
-            margin-right: 8px;
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--primary);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(138, 43, 226, 0.1);
-        }
-        
-        .link-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .link-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 1.2rem;
-        }
-        
-        .link-details {
-            flex: 1;
-        }
-        
-        .link-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .link-url {
-            font-size: 0.9rem;
-            color: var(--gray);
-            word-break: break-all;
-        }
-        
-        .link-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .action-btn {
-            background: transparent;
-            border: none;
-            color: var(--gray);
-            cursor: pointer;
-            font-size: 1rem;
-            transition: color 0.3s;
-        }
-        
-        .action-btn:hover {
-            color: var(--light);
-        }
-        
-        .profile-preview {
-            text-align: center;
-            margin-bottom: 30px;
-            width: 100%;
-        }
-        
-        .profile-pic {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--primary);
-            margin-bottom: 15px;
-        }
-        
-        .profile-name {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-        
-        .profile-bio {
-            color: var(--gray);
-            margin-bottom: 20px;
-        }
-        
-        .links-preview {
-            width: 100%;
-        }
-        
-        .preview-link {
-            display: block;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            text-decoration: none;
-            color: var(--light);
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
         }
-        
-        .preview-link:hover {
+        .bio-link:hover {
             background: rgba(138, 43, 226, 0.2);
-            transform: translateY(-2px);
-        }
-        
-        .saved-bios {
-            margin-top: 50px;
-        }
-        
-        .bios-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .bio-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .bio-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .bio-card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .bio-card-pic {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 15px;
-            border: 2px solid var(--primary);
-        }
-        
-        .bio-card-name {
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-        
-        .bio-card-links {
-            margin-top: 15px;
-        }
-        
-        .bio-card-link {
-            display: block;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: var(--gray);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .bio-card-link:hover {
-            color: var(--light);
-            background: rgba(138, 43, 226, 0.2);
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: var(--gray);
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 50px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--gray);
-        }
-        
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .tab.active {
-            border-bottom: 2px solid var(--primary);
-            color: var(--primary);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
+            transform: translateY(-3px);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">suzak.info</div>
-            <div class="tagline">Create beautiful bio links for your friends</div>
-        </header>
+    <div class="bio-page">
+        <img src="{avatar}" alt="{name}" class="bio-avatar" id="bioAvatar">
+        <h1 class="bio-name" id="bioName">{name}</h1>
+        <p class="bio-bio" id="bioBio">{bio}</p>
         
-        <div class="tabs">
-            <div class="tab active" data-tab="create">Create Bio</div>
-            <div class="tab" data-tab="manage">Manage Bios</div>
+        <div class="bio-links" id="bioLinks">
+            <!-- Links will be inserted here -->
         </div>
         
-        <div class="tab-content active" id="create-tab">
-            <div class="main-content">
-                <div class="creator-panel">
-                    <h2><i class="fas fa-plus-circle"></i> Create New Bio</h2>
-                    
-                    <div class="form-group">
-                        <label for="profileName">Name</label>
-                        <input type="text" id="profileName" placeholder="Enter your friend's name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="profileBio">Bio</label>
-                        <textarea id="profileBio" rows="3" placeholder="Enter a short bio"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="profilePic">Profile Picture URL</label>
-                        <input type="text" id="profilePic" placeholder="Paste image URL">
-                    </div>
-                    
-                    <h3 style="margin: 25px 0 15px; color: var(--primary);">Links</h3>
-                    
-                    <div id="linksContainer">
-                        <!-- Links will be added here -->
-                    </div>
-                    
-                    <button class="btn btn-secondary" id="addLinkBtn">
-                        <i class="fas fa-plus"></i> Add Link
-                    </button>
-                    
-                    <div style="margin-top: 30px; display: flex; gap: 10px;">
-                        <button class="btn" id="previewBtn">
-                            <i class="fas fa-eye"></i> Preview
-                        </button>
-                        <button class="btn" id="saveBioBtn">
-                            <i class="fas fa-save"></i> Save Bio
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="preview-panel">
-                    <h2><i class="fas fa-eye"></i> Preview</h2>
-                    
-                    <div class="profile-preview">
-                        <img src="https://via.placeholder.com/120" alt="Profile" class="profile-pic" id="previewProfilePic">
-                        <div class="profile-name" id="previewName">Your Friend's Name</div>
-                        <div class="profile-bio" id="previewBio">A short bio will appear here</div>
-                    </div>
-                    
-                    <div class="links-preview" id="previewLinks">
-                        <!-- Preview links will be added here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="manage-tab">
-            <div class="saved-bios">
-                <h2><i class="fas fa-users"></i> Saved Bios</h2>
-                
-                <div id="biosContainer">
-                    <!-- Saved bios will appear here -->
-                    <div class="empty-state" id="emptyBios">
-                        <i class="fas fa-users"></i>
-                        <h3>No bios created yet</h3>
-                        <p>Create your first bio link to get started</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>suzak.info &copy; 2023 | Bio Link Generator</p>
-        </footer>
+        <p style="margin-top: 40px; color: #6c757d;">
+            Created with <a href="https://suzak.info" style="color: #8a2be2;">suzak.info</a>
+        </p>
     </div>
 
     <script>
-        // Sample data structure
-        let bios = JSON.parse(localStorage.getItem('suzakBios')) || [];
-        
-        // DOM elements
-        const profileNameInput = document.getElementById('profileName');
-        const profileBioInput = document.getElementById('profileBio');
-        const profilePicInput = document.getElementById('profilePic');
-        const linksContainer = document.getElementById('linksContainer');
-        const addLinkBtn = document.getElementById('addLinkBtn');
-        const previewBtn = document.getElementById('previewBtn');
-        const saveBioBtn = document.getElementById('saveBioBtn');
-        const previewProfilePic = document.getElementById('previewProfilePic');
-        const previewName = document.getElementById('previewName');
-        const previewBio = document.getElementById('previewBio');
-        const previewLinks = document.getElementById('previewLinks');
-        const biosContainer = document.getElementById('biosContainer');
-        const emptyBios = document.getElementById('emptyBios');
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        // Link counter
-        let linkCount = 0;
-        
-        // Add new link form
-        function addLinkForm() {
-            linkCount++;
-            const linkId = `link-${linkCount}`;
+        // Get bio data from URL parameters
+        function getBioData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedData = urlParams.get('data');
             
-            const linkHTML = `
-                <div class="link-item" id="${linkId}">
-                    <div class="link-icon">
-                        <i class="fas fa-link"></i>
-                    </div>
-                    <div class="link-details">
-                        <input type="text" class="link-title-input" placeholder="Link title (e.g., Instagram)">
-                        <input type="url" class="link-url-input" placeholder="https://example.com">
-                    </div>
-                    <div class="link-actions">
-                        <button class="action-btn delete-link" data-link="${linkId}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            linksContainer.insertAdjacentHTML('beforeend', linkHTML);
-            
-            // Add event listener to delete button
-            document.querySelector(`#${linkId} .delete-link`).addEventListener('click', function() {
-                document.getElementById(linkId).remove();
-            });
-        }
-        
-        // Update preview
-        function updatePreview() {
-            // Update profile info
-            previewName.textContent = profileNameInput.value || 'Your Friend\'s Name';
-            previewBio.textContent = profileBioInput.value || 'A short bio will appear here';
-            previewProfilePic.src = profilePicInput.value || 'https://via.placeholder.com/120';
-            
-            // Update links
-            previewLinks.innerHTML = '';
-            const linkItems = document.querySelectorAll('.link-item');
-            
-            if (linkItems.length === 0) {
-                previewLinks.innerHTML = '<p style="text-align: center; color: var(--gray);">No links added yet</p>';
-                return;
-            }
-            
-            linkItems.forEach(item => {
-                const titleInput = item.querySelector('.link-title-input');
-                const urlInput = item.querySelector('.link-url-input');
-                
-                if (titleInput.value || urlInput.value) {
-                    const linkHTML = `
-                        <a href="${urlInput.value || '#'}" class="preview-link" target="_blank">
-                            ${titleInput.value || 'New Link'}
-                        </a>
-                    `;
-                    previewLinks.insertAdjacentHTML('beforeend', linkHTML);
+            if (encodedData) {
+                try {
+                    return JSON.parse(decodeURIComponent(encodedData));
+                } catch (e) {
+                    console.error('Error parsing bio data:', e);
                 }
-            });
-            
-            if (previewLinks.innerHTML === '') {
-                previewLinks.innerHTML = '<p style="text-align: center; color: var(--gray);">No links added yet</p>';
             }
+            
+            // Fallback to inline data (for direct HTML files)
+            return window.bioData || null;
         }
         
-        // Save bio
-        function saveBio() {
-            const name = profileNameInput.value.trim();
-            const bio = profileBioInput.value.trim();
-            const profilePic = profilePicInput.value.trim();
+        // Render the bio page
+        function renderBio() {
+            const bioData = getBioData();
             
-            if (!name) {
-                alert('Please enter a name for the bio');
+            if (!bioData) {
+                document.body.innerHTML = '<div class="bio-page"><h1>Bio not found</h1><p>This bio link may be invalid or expired.</p></div>';
                 return;
             }
             
-            // Collect links
-            const links = [];
-            const linkItems = document.querySelectorAll('.link-item');
+            // Update page content
+            document.title = `${bioData.name} - suzak.info`;
+            document.getElementById('bioName').textContent = bioData.name;
+            document.getElementById('bioBio').textContent = bioData.bio;
+            document.getElementById('bioAvatar').src = bioData.avatar;
             
-            linkItems.forEach(item => {
-                const title = item.querySelector('.link-title-input').value.trim();
-                const url = item.querySelector('.link-url-input').value.trim();
-                
-                if (title && url) {
-                    links.push({ title, url });
-                }
-            });
-            
-            // Create bio object
-            const bioObj = {
-                id: Date.now(),
-                name,
-                bio,
-                profilePic: profilePic || 'https://via.placeholder.com/120',
-                links,
-                createdAt: new Date().toLocaleDateString()
-            };
-            
-            // Add to bios array
-            bios.push(bioObj);
-            
-            // Save to localStorage
-            localStorage.setItem('suzakBios', JSON.stringify(bios));
-            
-            // Reset form
-            profileNameInput.value = '';
-            profileBioInput.value = '';
-            profilePicInput.value = '';
-            linksContainer.innerHTML = '';
-            linkCount = 0;
-            
-            // Update preview
-            updatePreview();
-            
-            // Show success message
-            alert(`Bio for ${name} has been saved successfully!`);
-            
-            // Switch to manage tab
-            switchTab('manage');
-            
-            // Update bios list
-            displayBios();
-        }
-        
-        // Display saved bios
-        function displayBios() {
-            if (bios.length === 0) {
-                emptyBios.style.display = 'block';
-                biosContainer.innerHTML = '';
-                biosContainer.appendChild(emptyBios);
-                return;
-            }
-            
-            emptyBios.style.display = 'none';
-            
-            let biosHTML = '<div class="bios-grid">';
-            
-            bios.forEach(bio => {
-                let linksHTML = '';
-                
-                bio.links.forEach(link => {
-                    linksHTML += `
-                        <a href="${link.url}" class="bio-card-link" target="_blank">
-                            <i class="fas fa-link"></i> ${link.title}
-                        </a>
-                    `;
+            // Render links
+            const linksContainer = document.getElementById('bioLinks');
+            if (bioData.links && bioData.links.length > 0) {
+                bioData.links.forEach(link => {
+                    const linkElement = document.createElement('a');
+                    linkElement.href = link.url;
+                    linkElement.className = 'bio-link';
+                    linkElement.textContent = link.title;
+                    linkElement.target = '_blank';
+                    linksContainer.appendChild(linkElement);
                 });
-                
-                biosHTML += `
-                    <div class="bio-card">
-                        <div class="bio-card-header">
-                            <img src="${bio.profilePic}" alt="${bio.name}" class="bio-card-pic">
-                            <div class="bio-card-name">${bio.name}</div>
-                        </div>
-                        <p>${bio.bio}</p>
-                        <div class="bio-card-links">
-                            ${linksHTML}
-                        </div>
-                        <div style="margin-top: 15px; display: flex; gap: 10px;">
-                            <button class="btn btn-secondary" onclick="viewBio(${bio.id})">
-                                <i class="fas fa-external-link-alt"></i> View
-                            </button>
-                            <button class="btn btn-secondary" onclick="editBio(${bio.id})">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-secondary" onclick="deleteBio(${bio.id})">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            biosHTML += '</div>';
-            biosContainer.innerHTML = biosHTML;
-        }
-        
-        // Tab switching
-        function switchTab(tabName) {
-            tabs.forEach(tab => {
-                if (tab.dataset.tab === tabName) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
-            });
-            
-            tabContents.forEach(content => {
-                if (content.id === `${tabName}-tab`) {
-                    content.classList.add('active');
-                } else {
-                    content.classList.remove('active');
-                }
-            });
-        }
-        
-        // Bio management functions
-        function viewBio(id) {
-            const bio = bios.find(b => b.id === id);
-            if (bio) {
-                // In a real app, this would open the bio page
-                alert(`Viewing bio for ${bio.name}. In a real implementation, this would open the bio page at suzak.info/${bio.id}`);
+            } else {
+                linksContainer.innerHTML = '<p>No links added yet.</p>';
             }
         }
         
-        function editBio(id) {
-            const bio = bios.find(b => b.id === id);
-            if (bio) {
-                // Populate form with bio data
-                profileNameInput.value = bio.name;
-                profileBioInput.value = bio.bio;
-                profilePicInput.value = bio.profilePic;
-                
-                // Clear existing links
-                linksContainer.innerHTML = '';
-                linkCount = 0;
-                
-                // Add links from bio
-                bio.links.forEach(link => {
-                    addLinkForm();
-                    const lastLink = document.querySelector('.link-item:last-child');
-                    lastLink.querySelector('.link-title-input').value = link.title;
-                    lastLink.querySelector('.link-url-input').value = link.url;
-                });
-                
-                // Update preview
-                updatePreview();
-                
-                // Switch to create tab
-                switchTab('create');
-                
-                // Remove the bio from the list (we'll re-add it when saved)
-                bios = bios.filter(b => b.id !== id);
-                localStorage.setItem('suzakBios', JSON.stringify(bios));
-            }
-        }
-        
-        function deleteBio(id) {
-            if (confirm('Are you sure you want to delete this bio?')) {
-                bios = bios.filter(b => b.id !== id);
-                localStorage.setItem('suzakBios', JSON.stringify(bios));
-                displayBios();
-            }
-        }
-        
-        // Event listeners
-        addLinkBtn.addEventListener('click', addLinkForm);
-        previewBtn.addEventListener('click', updatePreview);
-        saveBioBtn.addEventListener('click', saveBio);
-        
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                switchTab(tab.dataset.tab);
-                if (tab.dataset.tab === 'manage') {
-                    displayBios();
-                }
-            });
-        });
-        
-        // Initialize
-        addLinkForm();
-        updatePreview();
-        
-        // Make functions global for onclick attributes
-        window.viewBio = viewBio;
-        window.editBio = editBio;
-        window.deleteBio = deleteBio;
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', renderBio);
     </script>
 </body>
 </html>
